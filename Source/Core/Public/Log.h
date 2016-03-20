@@ -1,5 +1,5 @@
 #pragma once
-#include <Core.h>
+#include <Namespace.h>
 #include <iostream>
 #include <fstream>
 C3_NAMESPACE_BEGIN

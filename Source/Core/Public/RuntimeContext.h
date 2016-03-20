@@ -1,10 +1,9 @@
 #pragma once
+#include <Namespace.h>
 
 class FEngineLoader;
 
-namespace c3
-{
-
+C3_NAMESPACE_BEGIN
 class FSystem;
 class FEngine;
 class IRender;
@@ -19,4 +18,4 @@ struct FRuntimeContext
 
 extern FRuntimeContext RuntimeContext;
 
-}
+C3_NAMESPACE_END
