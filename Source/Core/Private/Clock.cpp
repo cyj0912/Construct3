@@ -1,8 +1,7 @@
 #include "Clock.h"
+#if C3_OS == C3_OS_WINDOWS_NT
 #include <Windows.h>
-
 C3_NAMESPACE_BEGIN
-
 FPerfTimer::FPerfTimer()
 {
 }
@@ -76,5 +75,83 @@ float FPerfTimer::GetDeltaTime() const
 {
 	return static_cast<float>(DeltaTime);
 }
-
 C3_NAMESPACE_END
+
+#else
+
+#include <mach/mach.h>
+#include <mach/mach_time.h>
+static mach_timebase_info_data_t sTimebaseInfo;
+C3_NAMESPACE_BEGIN
+FPerfTimer::FPerfTimer()
+{
+}
+
+void FPerfTimer::Init()
+{
+    if(sTimebaseInfo.denom == 0)
+    mach_timebase_info(&sTimebaseInfo);
+
+    uint64_t Count = mach_absolute_time();
+    CurrCount = Count;
+    PrevCount = Count;
+    CountDuringGame = 0;
+
+    bPaused = false;
+    bJustUnpaused = false;
+
+    DeltaTime = 0.0;
+}
+
+void FPerfTimer::Tick()
+{
+    if (bPaused)
+    {
+        DeltaTime = 0.0;
+    }
+    else if(bJustUnpaused)
+    {
+        bJustUnpaused = false;
+        CurrCount = mach_absolute_time();
+        PrevCount = CurrCount;
+        DeltaTime = 0.0;
+    }
+    else
+    {
+        PrevCount = CurrCount;
+        CurrCount = mach_absolute_time();
+        DeltaTime = (double)(CurrCount - PrevCount) * sTimebaseInfo.numer / sTimebaseInfo.denom / 1000000000.0;
+        if (DeltaTime < 0.0)
+            DeltaTime = 0.0;
+        CountDuringGame += CurrCount - PrevCount;
+    }
+}
+
+void FPerfTimer::SwitchPause()
+{
+    if(bPaused)
+    {
+        bPaused = false;
+        bJustUnpaused = true;
+    }
+    else
+    {
+        bPaused = true;
+    }
+}
+bool FPerfTimer::IsPaused()
+{
+    return bPaused;
+}
+
+float FPerfTimer::GetGameTime() const
+{
+    return static_cast<float>((double)CountDuringGame * sTimebaseInfo.numer / sTimebaseInfo.denom / 1000000000.0);
+}
+float FPerfTimer::GetDeltaTime() const
+{
+    return static_cast<float>(DeltaTime);
+}
+C3_NAMESPACE_END
+
+#endif

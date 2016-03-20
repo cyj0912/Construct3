@@ -53,7 +53,7 @@ void FRender::PrepareGL()
     vg = nvgCreateGL3(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
 
 	nvgCreateFont(vg, "normal", FFile::GetPhysicalPath("Roboto-Light.ttf").c_str());
-	image = nvgCreateImage(vg, FFile::GetPhysicalPath("tree2.png").c_str(), 0);
+	image = nvgCreateImage(vg, FFile::GetPhysicalPath("loading.png").c_str(), 0);
 }
 
 void FRender::RenderOneFrame()
@@ -64,6 +64,7 @@ void FRender::RenderOneFrame()
     
     RenderSprite(FSpriteDesc());
 
+    /*
     NVGpaint bg;
     bg = nvgBoxGradient(vg, 300, 400, 200, 300, 3, 10, nvgRGBA(255, 255, 255, 200), nvgRGBA(32, 32, 32, 32));
     nvgBeginPath(vg);
@@ -75,15 +76,9 @@ void FRender::RenderOneFrame()
     nvgRoundedRect(vg, 300, 400, 200, 300, 4-0.5f);
     nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 48));
     nvgStroke(vg);
-	
-	std::stringstream ss;
-	ss << RuntimeContext.System->GetSystemClock()->GetGameTime() << "s";
-	nvgFillColor(vg, nvgRGB(0, 0, 0));
-	nvgFontSize(vg, 36);
-	nvgFontFace(vg, "normal");
-	nvgText(vg, 0, 150, ss.str().c_str(), nullptr);
 
 	DrawControl(300, 300, 100, 100);
+     */
 
 	for(auto cmd : CommandQueue2D)
 	{
@@ -91,8 +86,16 @@ void FRender::RenderOneFrame()
 	}
 	CommandQueue2D.clear();
 
+    std::stringstream ss;
+    ss << RuntimeContext.System->GetSystemClock()->GetGameTime() << "s";
+    nvgFillColor(vg, nvgRGB(0, 0, 0));
+    nvgFontSize(vg, 36);
+    nvgFontFace(vg, "normal");
+    nvgText(vg, 0, 150, ss.str().c_str(), nullptr);
+
     nvgEndFrame(vg);
-    
+
+	/*
     Shader2D->Bind();
     glm::mat4 matModel = glm::mat4();
     glm::mat4 matView = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -0.5f));
@@ -104,11 +107,12 @@ void FRender::RenderOneFrame()
     GLint uMVPLoc = glGetUniformLocation(Shader2D->Program, "uMVP");
     glUniformMatrix4fv(uMVPLoc, 1, GL_FALSE, value_ptr(matMVP));
     Mesh->Draw();
+    */
 }
 
 void FRender::RenderSprite(const FSpriteDesc& desc)
 {
-	NVGpaint bg = nvgImagePattern(vg, 0, 0, 1500, 768, 0.0f, image, 1.0f);
+	NVGpaint bg = nvgImagePattern(vg, 0, 0, (float)Width, (float)Height, 0.0f, image, 1.0f);
 	nvgBeginPath(vg);
 	nvgRect(vg, 0, 0, (float)Width, (float)Height);
 	nvgFillPaint(vg, bg);

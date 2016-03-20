@@ -20,7 +20,8 @@ int main(int argc, char *argv[])
 #endif
 	RuntimeContext.Construct();
 	RuntimeContext.System->Init();
-	RuntimeContext.System->SetRootDirectory("E:/Dev/construct3");
+	//RuntimeContext.System->SetRootDirectory("E:/Dev/construct3");
+	RuntimeContext.System->SetRootDirectory("/Volumes/E/Dev/construct3");
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
