@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 	RuntimeContext.System->Init();
 	//RuntimeContext.System->SetRootDirectory("E:/Dev/construct3");
 	RuntimeContext.System->SetRootDirectory("/Volumes/E/Dev/construct3");
-	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
+	SDL_Init(SDL_INIT_VIDEO);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -36,7 +36,6 @@ int main(int argc, char *argv[])
 	render.Resize(1280, 720);
 	RuntimeContext.Engine = new FEngine;
     RuntimeContext.Engine->Test();
-    uint64_t timeLast = SDL_GetPerformanceCounter();
 	std::string mousePosStr;
 	for (SDL_PollEvent(&e); e.type != SDL_QUIT; SDL_PollEvent(&e))
 	{
@@ -52,14 +51,12 @@ int main(int argc, char *argv[])
 			if(e.key.keysym.sym == SDLK_SPACE)
 				RuntimeContext.System->GetSystemClock()->SwitchPause();
 		}
-        uint64_t timeCurr = SDL_GetPerformanceCounter();
         RuntimeContext.Engine->Update();
 		std::function<void()> f = std::bind(&FRender::RenderText, &render, mousePosStr.c_str());
 		FCallablePtrCommand<std::function<void()>> cmd = FCallablePtrCommand<std::function<void()>>(&f);
 		render.Push2DCommand(&cmd);
 		render.RenderOneFrame();
 		SDL_GL_SwapWindow(window);
-        timeLast = timeCurr;
 	}
 	SDL_GL_DeleteContext(context);
 	SDL_DestroyWindow(window);

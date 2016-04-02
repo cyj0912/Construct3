@@ -8,7 +8,8 @@ class EScene : public EEntity
 public:
     EScene();
     ~EScene();
-    virtual void Update();
+    virtual void Spawn(FEntityRef parent) override;
+    virtual void Update() override;
 };
 
 C3_NAMESPACE_END

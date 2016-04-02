@@ -1,4 +1,5 @@
 #include "Entity.h"
+#include "Component.h"
 
 C3_NAMESPACE_BEGIN
 
@@ -28,7 +29,26 @@ void EEntity::Kill()
     for(auto ent : ChildEntities)
     {
         ent->Kill();
+        delete ent;
     }
+}
+
+void EEntity::AttachComponent(FEntityRef ref)
+{
+    TypeId id = typeid(ref).hash_code();
+    Components[id] = ref;
+}
+
+FEntityRef EEntity::GetComponent(TypeId typeId)
+{
+    if(Components.find(typeId) != Components.end())
+        return Components[typeId];
+    return nullptr;
+}
+
+void EEntity::DetachComponent(TypeId typeId)
+{
+    Components.erase(typeId);
 }
 
 C3_NAMESPACE_END

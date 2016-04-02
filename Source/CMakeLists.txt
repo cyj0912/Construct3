@@ -16,8 +16,17 @@ if(UNIX)
 else()
     set(BUILD_SHARED_LIBS OFF)
 endif()
+
+macro(c3_config_module name)
+    foreach(lib ${ARGN})
+        target_link_libraries(${name} PRIVATE ${lib})
+    endforeach()
+endmacro()
+
+include_directories(.)
 add_subdirectory(Core)
+add_subdirectory(Resource) # -> Core
 add_subdirectory(Editor) # -> Core, Engine, OpenGL3Render
 add_subdirectory(Engine) # -> Core
-add_subdirectory(OpenGL3Render) # -> Core
+add_subdirectory(OpenGL3Render) # -> Core, Resource
 add_subdirectory(Launcher) # -> Core, OpenGL3Render

@@ -1,7 +1,7 @@
 #pragma once
 #include <Core.h>
 #include "Factory.h"
-#include "Scene.h"
+#include "Entity.h"
 
 C3_NAMESPACE_BEGIN
 class FEngine

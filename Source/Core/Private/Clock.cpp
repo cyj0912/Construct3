@@ -1,6 +1,7 @@
 #include "Clock.h"
 #if C3_OS == C3_OS_WINDOWS_NT
 #include <Windows.h>
+static double SecondsPerCount;
 C3_NAMESPACE_BEGIN
 FPerfTimer::FPerfTimer()
 {

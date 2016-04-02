@@ -11,6 +11,7 @@ GLGameWindow::GLGameWindow()
 void GLGameWindow::initializeGL()
 {
     Render.Init();
+    c3::RuntimeContext.Engine->Test();
 }
 
 void GLGameWindow::resizeGL(int w, int h)
@@ -22,4 +23,5 @@ void GLGameWindow::paintGL()
 {
 	c3::RuntimeContext.Engine->Update();
     Render.RenderOneFrame();
+    this->update();
 }

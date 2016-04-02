@@ -5,6 +5,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Shader.h"
 #include "Mesh.h"
+#include <Resource/Public/Mesh.h>
 #include <Log.h>
 #include <File.h>
 #include <System.h>
@@ -15,7 +16,7 @@
 C3_NAMESPACE_BEGIN
 
 FShader* Shader2D;
-FMesh* Mesh;
+FRenderMesh* Mesh;
 struct NVGcontext* vg;
 int image;
 FRender::FRender()
@@ -44,70 +45,66 @@ void FRender::PrepareGL()
 {
     const unsigned char* glVersion = glGetString(GL_VERSION);
     FLog::Debug(reinterpret_cast<const char*>(glVersion));
-	glClearColor(0.899f, 0.96f, 1.0f, 1.0f);
+	//glClearColor(0.899f, 0.96f, 1.0f, 1.0f);
+	glClearColor(0, 0, 0, 0);
+	glClearDepth(1);
 	Shader2D = new FShader;
 	Shader2D->Load();
-	Mesh = new FMesh;
+
+	RMesh* rm = new RMesh("demobox.obj");
+	rm->LoadMesh();
+	Mesh = new FRenderMesh(rm);
     Mesh->Prepare();
+	rm->Release();
     glEnable(GL_CULL_FACE);
+	//glDisable(GL_CULL_FACE);
     vg = nvgCreateGL3(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
 
-	nvgCreateFont(vg, "normal", FFile::GetPhysicalPath("Roboto-Light.ttf").c_str());
-	image = nvgCreateImage(vg, FFile::GetPhysicalPath("loading.png").c_str(), 0);
+	nvgCreateFont(vg, "normal", RFile::GetPhysicalPath("Roboto-Light.ttf").c_str());
+	image = nvgCreateImage(vg, RFile::GetPhysicalPath("loading.png").c_str(), 0);
 }
 
 void FRender::RenderOneFrame()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    nvgBeginFrame(vg, Width, Height, 1.0f);
+    RenderSprite(FSpriteDesc());
+    nvgEndFrame(vg);
+
+    Shader2D->Bind();
+	glm::mat4 matModel = glm::rotate(glm::mat4(1.0f), RuntimeContext.System->GetSystemClock()->GetGameTime(), glm::vec3(0.0f, 1.0f, 0.0f));
+    //glm::mat4 matView = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -1.0f + RuntimeContext.System->GetSystemClock()->GetGameTime()));
+	glm::mat4 matView = glm::lookAtLH(glm::vec3(0, 0, -10.0f), glm::vec3(), glm::vec3(0.0f, 1.0f, 0.0f));
+    float PixelsPerUnit = 100.0f;
+    //glm::mat4 matProj = glm::ortho(-Width / 2.0f / PixelsPerUnit, Width / 2.0f / PixelsPerUnit,
+    //                               -Height / 2.0f / PixelsPerUnit, Height / 2.0f / PixelsPerUnit);
+	glm::mat4 matProj = glm::perspectiveLH(1.5f, (float)Width / (float)Height, 0.1f, 100.0f);
+    glm::mat4 matMV = matView * matModel;
+    glm::mat4 matMVP = matProj * matMV;
+	glm::vec4 result = matMVP * glm::vec4(1, 1, 1, 1);
+    GLint uMVPLoc = glGetUniformLocation(Shader2D->Program, "uMVP");
+    glUniformMatrix4fv(uMVPLoc, 1, GL_FALSE, value_ptr(matMVP));
+	glDisable(GL_CULL_FACE);
+	glFrontFace(GL_CW);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+    Mesh->Draw();
+
 
     nvgBeginFrame(vg, Width, Height, 1.0f);
-    
-    RenderSprite(FSpriteDesc());
-
-    /*
-    NVGpaint bg;
-    bg = nvgBoxGradient(vg, 300, 400, 200, 300, 3, 10, nvgRGBA(255, 255, 255, 200), nvgRGBA(32, 32, 32, 32));
-    nvgBeginPath(vg);
-    nvgRoundedRect(vg, 300, 400, 200, 300, 4);
-    nvgFillPaint(vg, bg);
-    nvgFill(vg);
-
-    nvgBeginPath(vg);
-    nvgRoundedRect(vg, 300, 400, 200, 300, 4-0.5f);
-    nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 48));
-    nvgStroke(vg);
-
-	DrawControl(300, 300, 100, 100);
-     */
-
 	for(auto cmd : CommandQueue2D)
 	{
 		cmd->Execute();
 	}
 	CommandQueue2D.clear();
-
     std::stringstream ss;
-    ss << RuntimeContext.System->GetSystemClock()->GetGameTime() << "s";
+    ss << "SysClk: " << RuntimeContext.System->GetSystemClock()->GetGameTime() << "s";
     nvgFillColor(vg, nvgRGB(0, 0, 0));
     nvgFontSize(vg, 36);
     nvgFontFace(vg, "normal");
     nvgText(vg, 0, 150, ss.str().c_str(), nullptr);
-
     nvgEndFrame(vg);
 
-	/*
-    Shader2D->Bind();
-    glm::mat4 matModel = glm::mat4();
-    glm::mat4 matView = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -0.5f));
-    float PixelsPerUnit = 100.0f;
-    glm::mat4 matProj = glm::ortho(-Width / 2.0f / PixelsPerUnit, Width / 2 / PixelsPerUnit,
-                                   -Height / 2.0f / PixelsPerUnit, Height / 2.0f / PixelsPerUnit);
-    glm::mat4 matMV = matModel * matView;
-    glm::mat4 matMVP = matMV * matProj;
-    GLint uMVPLoc = glGetUniformLocation(Shader2D->Program, "uMVP");
-    glUniformMatrix4fv(uMVPLoc, 1, GL_FALSE, value_ptr(matMVP));
-    Mesh->Draw();
-    */
 }
 
 void FRender::RenderSprite(const FSpriteDesc& desc)
@@ -147,4 +144,15 @@ void FRender::Push2DCommand(ICommand* pCmd)
 	CommandQueue2D.push_back(pCmd);
 }
 
+void FRender::RenderModel(FShader* shader, FRenderMesh* mesh, float* transformMat4)
+{
+    Shader2D->Bind();
+    GLint uMVPLoc = glGetUniformLocation(Shader2D->Program, "uMVP");
+    glUniformMatrix4fv(uMVPLoc, 1, GL_FALSE, transformMat4);
+    glDisable(GL_CULL_FACE);
+    glFrontFace(GL_CW);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+    Mesh->Draw();
+}
 C3_NAMESPACE_END

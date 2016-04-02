@@ -12,10 +12,10 @@ FShader::FShader()
 
 void FShader::Load()
 {
-	FFile vertSrc = FFile("color.v.glsl");
+	RFile vertSrc = RFile("basic.v.glsl");
 	char vertBuffer[4096];
 	vertSrc.BufferRead(vertBuffer, sizeof(vertBuffer));
-	FFile fragSrc = FFile("color.f.glsl");
+	RFile fragSrc = RFile("color.f.glsl");
 	char fragBuffer[4096];
 	fragSrc.BufferRead(fragBuffer, sizeof(fragBuffer));
 	const char* bufArr[] = { vertBuffer, fragBuffer };
