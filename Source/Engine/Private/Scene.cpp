@@ -15,14 +15,14 @@ EScene::~EScene()
 void EScene::Spawn(FEntityRef parent)
 {
     EEntity::Spawn(parent);
-    EActor* a = RuntimeContext.Engine->GetEntityManager().NewEntity<EActor>();
+    EActor* a = RC.Engine->GetEntityManager().NewEntity<EActor>();
     a->Spawn(this);
 
-    CTransform* ct = RuntimeContext.Engine->GetEntityManager().NewEntity<CTransform>();
+    CTransform* ct = RC.Engine->GetEntityManager().NewEntity<CTransform>();
     a->AttachComponent(ct);
     a->PrintCompInfo();
 
-	ECamera* cam = RuntimeContext.Engine->GetEntityManager().NewEntity<ECamera>();
+	ECamera* cam = RC.Engine->GetEntityManager().NewEntity<ECamera>();
 	cam->Spawn(this);
 	cam->PrintCompInfo();
 }

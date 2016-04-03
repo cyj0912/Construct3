@@ -45,8 +45,8 @@ int main(int argc, char *argv[])
     absPath = dirInfo.canonicalFilePath();
     EngineLoader.SetRootDirectory(absPath.toUtf8().constData());
 
-    c3::RuntimeContext.Loader = &EngineLoader;
-    c3::RuntimeContext.Loader->InitEngine();
+    c3::RC.Loader = &EngineLoader;
+    c3::RC.Loader->InitEngine();
 
     QSurfaceFormat format;
     format.setVersion(4, 5);

@@ -14,8 +14,9 @@ FEngine::~FEngine()
 
 void FEngine::Update()
 {
-	RuntimeContext.System->GetSystemClock()->Tick();
+	RC.System->GetSystemClock()->Tick();
     Scene->Update();
+    GetEntityManager().ReleaseMemory();
 }
 
 void FEngine::Test()

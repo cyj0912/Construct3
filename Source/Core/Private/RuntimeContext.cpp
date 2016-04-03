@@ -6,9 +6,9 @@ namespace c3
 
 void FRuntimeContext::Construct()
 {
-	RuntimeContext.System = new FSystem;
+	RC.System = new FSystem;
 }
 
-FRuntimeContext RuntimeContext;
+FRuntimeContext RC;
 
 }

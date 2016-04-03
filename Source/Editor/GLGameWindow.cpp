@@ -19,7 +19,7 @@ GLGameWindow::GLGameWindow()
 void GLGameWindow::initializeGL()
 {
     Render.Init();
-    c3::RuntimeContext.Engine->Test();
+    c3::RC.Engine->Test();
 }
 
 void GLGameWindow::resizeGL(int w, int h)
@@ -29,7 +29,7 @@ void GLGameWindow::resizeGL(int w, int h)
 
 void GLGameWindow::paintGL()
 {
-	c3::RuntimeContext.Engine->Update();
+	c3::RC.Engine->Update();
     Render.RenderOneFrame();
     this->update();
 }
@@ -38,7 +38,7 @@ void GLGameWindow::keyPressEvent(QKeyEvent *event)
 {
     if(event->key() == Qt::Key_Space)
     {
-        c3::RuntimeContext.System->GetSystemClock()->SwitchPause();
+        c3::RC.System->GetSystemClock()->SwitchPause();
         event->accept();
     }
     QWindow::keyPressEvent(event);

@@ -16,6 +16,6 @@ struct FRuntimeContext
 	IRender* Render;
 };
 
-extern FRuntimeContext RuntimeContext;
+extern FRuntimeContext RC;
 
 C3_NAMESPACE_END

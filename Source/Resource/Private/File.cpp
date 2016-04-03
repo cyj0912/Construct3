@@ -7,7 +7,7 @@ RFile::RFile()
 
 RFile::RFile(const std::string &identifier)
 {
-    std::string& rd = static_cast<FSystem*>(RuntimeContext.System)->RootDirectory;
+    std::string& rd = static_cast<FSystem*>(RC.System)->RootDirectory;
     File = std::fstream(rd + "/Data/" + identifier);
 }
 
@@ -29,7 +29,7 @@ int RFile::BufferRead(char* buffer, int size)
 
 std::string RFile::GetPhysicalPath(const std::string& identifier)
 {
-    std::string& rd = static_cast<FSystem*>(RuntimeContext.System)->RootDirectory;
+    std::string& rd = static_cast<FSystem*>(RC.System)->RootDirectory;
     return rd + "/Data/" + identifier;
 }
 C3_NAMESPACE_END
