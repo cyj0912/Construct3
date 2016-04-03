@@ -1,9 +1,6 @@
 #include "Actor.h"
 C3_NAMESPACE_BEGIN
-template<> void* GetNewInstance<EActor>()
-{
-    return new EActor;
-}
+C3_DEFINE_ENTITY(EActor)
 
 EActor::EActor()
 {

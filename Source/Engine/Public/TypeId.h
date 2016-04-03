@@ -15,4 +15,10 @@ TypeId GetTypeId()
 template <typename T>
 void* GetNewInstance();
 
+#define C3_DEFINE_ENTITY(name) \
+template<> void* GetNewInstance<name>()\
+{\
+return new name;\
+}
+
 }

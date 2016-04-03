@@ -35,6 +35,8 @@ public:
         }
     }
 
+    FEntityRef GetParent();
+    void SetParent(FEntityRef parent);
     void AddChild(FEntityRef child);
     void RemoveChild(FEntityRef child);
 

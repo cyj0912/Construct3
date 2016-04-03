@@ -10,7 +10,8 @@ void FEntityManager::ReleaseMemory()
 {
     for(EEntity* p : AllocatedEntities)
     {
-        delete p;
+        if(p->GetParent() == nullptr)
+            delete p;
     }
 }
 C3_NAMESPACE_END

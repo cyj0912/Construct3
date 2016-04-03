@@ -21,7 +21,7 @@ void FEngine::Update()
 
 void FEngine::Test()
 {
-    Scene = new EScene;
+    Scene = GetEntityManager().NewEntity<EScene>();
     Scene->Spawn();
 }
 

@@ -2,10 +2,7 @@
 #include "Component.h"
 C3_NAMESPACE_BEGIN
 
-template<> void* GetNewInstance<ECamera>()
-{
-    return new ECamera;
-}
+C3_DEFINE_ENTITY(ECamera)
 
 ECamera::ECamera()
 {

@@ -9,6 +9,11 @@ EEntity::EEntity()
 
 EEntity::~EEntity()
 {
+    for(auto ent : ChildEntities)
+    {
+        if(ent->GetParent() == this)
+            ent->SetParent(nullptr);
+    }
 }
 
 void EEntity::Spawn(FEntityRef parent)
@@ -54,6 +59,16 @@ void EEntity::DetachComponent(TypeId typeId)
     Components.erase(typeId);
 }
 
+FEntityRef EEntity::GetParent()
+{
+    return ParentEntity;
+}
+
+void EEntity::SetParent(FEntityRef parent)
+{
+    ParentEntity = parent;
+}
+
 void EEntity::AddChild(FEntityRef child)
 {
     ChildEntities.insert(child);
@@ -63,5 +78,4 @@ void EEntity::RemoveChild(FEntityRef child)
 {
     ChildEntities.erase(child);
 }
-
 C3_NAMESPACE_END

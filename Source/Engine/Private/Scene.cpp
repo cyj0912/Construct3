@@ -4,6 +4,8 @@
 #include "Camera.h"
 #include "Engine.h"
 C3_NAMESPACE_BEGIN
+C3_DEFINE_ENTITY(EScene)
+
 EScene::EScene()
 {
 }
@@ -15,6 +17,9 @@ EScene::~EScene()
 void EScene::Spawn(FEntityRef parent)
 {
     EEntity::Spawn(parent);
+    if(parent == nullptr)
+        this->SetParent(this);
+
     EActor* a = RC.Engine->GetEntityManager().NewEntity<EActor>();
     a->Spawn(this);
 
