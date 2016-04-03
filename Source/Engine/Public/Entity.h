@@ -5,9 +5,6 @@
 #include <unordered_set>
 #include <unordered_map>
 
-#include <sstream>
-#include <Log.h>
-
 C3_NAMESPACE_BEGIN
 
 class EEntity;
@@ -22,18 +19,11 @@ public:
     virtual void Spawn(FEntityRef parent = nullptr);
     virtual void Update();
     virtual void Kill();
+
     void AttachComponent(FEntityRef ref);
     FEntityRef GetComponent(TypeId typeId);
     void DetachComponent(TypeId typeId);
-    void PrintCompInfo()
-    {
-        for(auto i : Components)
-        {
-            std::stringstream ss;
-            ss << i.first << " " << i.second;
-            FLog::Debug(ss.str().c_str());
-        }
-    }
+    void PrintCompInfo();
 
     FEntityRef GetParent();
     void SetParent(FEntityRef parent);

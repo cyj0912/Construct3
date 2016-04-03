@@ -1,7 +1,10 @@
 #include "Entity.h"
 #include "Component.h"
 
+#include <sstream>
+#include <Log.h>
 C3_NAMESPACE_BEGIN
+C3_DEFINE_ENTITY(EEntity)
 
 EEntity::EEntity()
 {
@@ -57,6 +60,16 @@ FEntityRef EEntity::GetComponent(TypeId typeId)
 void EEntity::DetachComponent(TypeId typeId)
 {
     Components.erase(typeId);
+}
+
+void EEntity::PrintCompInfo()
+{
+    for(auto i : Components)
+    {
+        std::stringstream ss;
+        ss << i.first << " " << i.second;
+        FLog::Debug(ss.str().c_str());
+    }
 }
 
 FEntityRef EEntity::GetParent()

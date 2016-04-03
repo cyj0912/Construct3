@@ -1,9 +1,7 @@
 #include "Engine.h"
 #include "System.h"
 #include "Scene.h"
-
 C3_NAMESPACE_BEGIN
-
 FEngine::FEngine()
 {
 }
@@ -29,5 +27,4 @@ FEntityManager &FEngine::GetEntityManager()
 {
     return EntityManager;
 }
-
 C3_NAMESPACE_END

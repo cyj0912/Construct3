@@ -1,7 +1,6 @@
 #include "Camera.h"
 #include "Component.h"
 C3_NAMESPACE_BEGIN
-
 C3_DEFINE_ENTITY(ECamera)
 
 ECamera::ECamera()

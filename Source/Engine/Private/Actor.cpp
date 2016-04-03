@@ -1,10 +1,22 @@
 #include "Actor.h"
+#include <cstdlib>
 C3_NAMESPACE_BEGIN
 C3_DEFINE_ENTITY(EActor)
 
+void GenRandomString(std::string& buffer, int len)
+{
+    static const char candidates[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for(int i = 0; i < len; i++)
+    {
+        buffer.push_back(candidates[std::rand() % sizeof(candidates)]);
+    }
+}
+
 EActor::EActor()
 {
-    Name = std::string("unnamed_actor");
+    std::string buf;
+    GenRandomString(buf, 8);
+    Name = "actor." + buf;
 }
 
 EActor::EActor(const std::string& name)
