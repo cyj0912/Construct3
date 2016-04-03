@@ -1,10 +1,12 @@
 #include "Actor.h"
 #include <cstdlib>
+#include <ctime>
 C3_NAMESPACE_BEGIN
 C3_DEFINE_ENTITY(EActor)
 
 void GenRandomString(std::string& buffer, int len)
 {
+    std::srand(std::time(nullptr));
     static const char candidates[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     for(int i = 0; i < len; i++)
     {
