@@ -12,4 +12,7 @@ TypeId GetTypeId()
     return typeid(T).hash_code();
 }
 
+template <typename T>
+void* GetNewInstance();
+
 }

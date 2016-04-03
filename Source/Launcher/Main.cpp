@@ -52,8 +52,8 @@ int main(int argc, char *argv[])
 				RuntimeContext.System->GetSystemClock()->SwitchPause();
 		}
         RuntimeContext.Engine->Update();
-		std::function<void()> f = std::bind(&FRender::RenderText, &render, mousePosStr.c_str());
-		FCallablePtrCommand<std::function<void()>> cmd = FCallablePtrCommand<std::function<void()>>(&f);
+		std::function<void()> f = std::bind(&FRender::RenderText, &render, mousePosStr);
+		FCallablePtrCommand<std::function<void()>> cmd = FCallablePtrCommand<std::function<void()>>(f);
 		render.Push2DCommand(&cmd);
 		render.RenderOneFrame();
 		SDL_GL_SwapWindow(window);

@@ -1,5 +1,10 @@
 #include "Actor.h"
 C3_NAMESPACE_BEGIN
+template<> void* GetNewInstance<EActor>()
+{
+    return new EActor;
+}
+
 EActor::EActor()
 {
     Name = std::string("unnamed_actor");

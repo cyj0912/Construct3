@@ -2,6 +2,11 @@
 #include "Component.h"
 C3_NAMESPACE_BEGIN
 
+template<> void* GetNewInstance<ECamera>()
+{
+    return new ECamera;
+}
+
 ECamera::ECamera()
 {
 
@@ -9,10 +14,17 @@ ECamera::ECamera()
 
 void ECamera::Spawn(FEntityRef parent)
 {
-    EEntity::Spawn(parent);
     CTransform* transform = new CTransform;
-    ChildEntities.push_back(transform);
-    AttachComponent(transform);
+    this->AddChild(transform);
+    this->AttachComponent(transform);
+    EEntity::Spawn(parent);
+}
+
+void ECamera::Kill()
+{
+    EEntity::Kill();
+    CTransform* transform = static_cast<CTransform*>(this->GetComponent(GetTypeId<CTransform>()));
+    delete transform;
 }
 
 C3_NAMESPACE_END

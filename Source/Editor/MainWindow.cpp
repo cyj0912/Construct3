@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QWidget* container = QWidget::createWindowContainer(glWindow);
     container->setFocusPolicy(Qt::TabFocus);
     ui->horizontalLayout->addWidget(container);
+    ui->horizontalLayout->setMargin(0);
 }
 
 MainWindow::~MainWindow()

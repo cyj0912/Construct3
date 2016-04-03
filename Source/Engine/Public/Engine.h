@@ -1,6 +1,6 @@
 #pragma once
 #include <Core.h>
-#include "Factory.h"
+#include "EntityManager.h"
 #include "Entity.h"
 
 C3_NAMESPACE_BEGIN
@@ -11,9 +11,10 @@ public:
     ~FEngine();
     void Update();
 	void Test();
+	FEntityManager& GetEntityManager();
 
 private:
-    FFactory Factory;
+    FEntityManager EntityManager;
     FEntityRef Scene;
 };
 

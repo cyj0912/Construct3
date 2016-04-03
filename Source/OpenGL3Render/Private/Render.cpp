@@ -131,12 +131,12 @@ void FRender::DrawControl(float x, float y, float w, float h)
 	nvgStroke(vg);
 }
 
-void FRender::RenderText(const char* text)
+void FRender::RenderText(std::string text)
 {
 	nvgFillColor(vg, nvgRGB(0, 0, 0));
 	nvgFontSize(vg, 36);
 	nvgFontFace(vg, "normal");
-	nvgText(vg, 0, 25, text, nullptr);
+	nvgText(vg, 0, 25, text.c_str(), nullptr);
 }
 
 void FRender::Push2DCommand(ICommand* pCmd)

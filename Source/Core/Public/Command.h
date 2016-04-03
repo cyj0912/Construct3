@@ -31,16 +31,19 @@ template <typename T>
 class FCallablePtrCommand : public ICommand
 {
 public:
-	FCallablePtrCommand(T* callable)
+	FCallablePtrCommand()
+	{
+	}
+	FCallablePtrCommand(T& callable)
 	{
 		Callable = callable;
 	}
 	void Execute() override
 	{
-		(*Callable)();
+		(Callable)();
 	}
 private:
-	T* Callable;
+	T Callable;
 };
 
 C3_NAMESPACE_END

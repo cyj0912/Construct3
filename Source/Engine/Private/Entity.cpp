@@ -14,6 +14,10 @@ EEntity::~EEntity()
 void EEntity::Spawn(FEntityRef parent)
 {
     ParentEntity = parent;
+    for(auto ent : ChildEntities)
+    {
+        ent->Spawn(this);
+    }
 }
 
 void EEntity::Update()
@@ -29,7 +33,6 @@ void EEntity::Kill()
     for(auto ent : ChildEntities)
     {
         ent->Kill();
-        delete ent;
     }
 }
 
@@ -49,6 +52,16 @@ FEntityRef EEntity::GetComponent(TypeId typeId)
 void EEntity::DetachComponent(TypeId typeId)
 {
     Components.erase(typeId);
+}
+
+void EEntity::AddChild(FEntityRef child)
+{
+    ChildEntities.insert(child);
+}
+
+void EEntity::RemoveChild(FEntityRef child)
+{
+    ChildEntities.erase(child);
 }
 
 C3_NAMESPACE_END

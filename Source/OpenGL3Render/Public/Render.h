@@ -38,7 +38,7 @@ public:
 	void RenderSprite(const FSpriteDesc& desc) override;
 	void Resize(int w, int h) override;
 	void DrawControl(float x, float y, float w, float h) override;
-	void RenderText(const char* text);
+	void RenderText(std::string text);
 	void Push2DCommand(ICommand* pCmd);
 	void RenderModel(FShader* shader, FRenderMesh* mesh, float* transformMat4);
 

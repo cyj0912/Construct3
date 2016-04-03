@@ -2,6 +2,7 @@
 #include <Core.h>
 #include "TypeId.h"
 #include <vector>
+#include <unordered_set>
 #include <unordered_map>
 
 #include <sstream>
@@ -34,9 +35,12 @@ public:
         }
     }
 
+    void AddChild(FEntityRef child);
+    void RemoveChild(FEntityRef child);
+
 protected:
     FEntityRef ParentEntity;
-    std::vector<FEntityRef> ChildEntities;
+    std::unordered_set<FEntityRef> ChildEntities;
     std::unordered_map<TypeId, FEntityRef> Components;
 };
 

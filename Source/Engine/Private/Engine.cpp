@@ -24,4 +24,9 @@ void FEngine::Test()
     Scene->Spawn();
 }
 
+FEntityManager &FEngine::GetEntityManager()
+{
+    return EntityManager;
+}
+
 C3_NAMESPACE_END
