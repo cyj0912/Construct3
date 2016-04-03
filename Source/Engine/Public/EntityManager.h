@@ -4,12 +4,6 @@
 #include <vector>
 C3_NAMESPACE_BEGIN
 class EEntity;
-extern template void* GetNewInstance<EEntity>();
-class EActor;
-extern template void* GetNewInstance<EActor>();
-class ECamera;
-extern template void* GetNewInstance<ECamera>();
-
 class FEntityManager
 {
 public:
