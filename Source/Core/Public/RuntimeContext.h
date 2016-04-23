@@ -7,6 +7,7 @@ C3_NAMESPACE_BEGIN
 class FSystem;
 class FEngine;
 class IRender;
+class IEditor;
 struct FRuntimeContext
 {
 	void Construct();
@@ -14,6 +15,7 @@ struct FRuntimeContext
 	FEngineLoader* Loader;
     FEngine* Engine;
 	IRender* Render;
+	IEditor* Editor;
 };
 
 extern FRuntimeContext RC;

@@ -6,89 +6,57 @@
 C3_NAMESPACE_BEGIN
 C3_DEFINE_ENTITY(EEntity)
 
-EEntity::EEntity()
-{
-}
-
-EEntity::~EEntity()
-{
-    for(auto ent : ChildEntities)
-    {
-        if(ent->GetParent() == this)
-            ent->SetParent(nullptr);
-    }
-}
-
-void EEntity::Spawn(FEntityRef parent)
-{
-    ParentEntity = parent;
-    for(auto ent : ChildEntities)
-    {
-        ent->Spawn(this);
-    }
-}
-
-void EEntity::Update()
-{
-    for(auto ent : ChildEntities)
-    {
-        ent->Update();
-    }
-}
-
-void EEntity::Kill()
-{
-    for(auto ent : ChildEntities)
-    {
-        ent->Kill();
-    }
-}
-
-void EEntity::AttachComponent(FEntityRef ref)
+void FCompContainer::AttachComponent(FEntityRef ref)
 {
     TypeId id = typeid(ref).hash_code();
     Components[id] = ref;
 }
 
-FEntityRef EEntity::GetComponent(TypeId typeId)
+FEntityRef FCompContainer::GetComponent(TypeId typeId)
 {
     if(Components.find(typeId) != Components.end())
         return Components[typeId];
     return nullptr;
 }
 
-void EEntity::DetachComponent(TypeId typeId)
+void FCompContainer::DetachComponent(TypeId typeId)
 {
     Components.erase(typeId);
 }
 
-void EEntity::PrintCompInfo()
+void FCompContainer::PrintCompInfo()
 {
     for(auto i : Components)
     {
         std::stringstream ss;
-        ss << i.first << " " << i.second;
+        ss << "Id:" << i.first << ", Add:" << i.second.operator->();
         FLog::Debug(ss.str().c_str());
     }
 }
 
-FEntityRef EEntity::GetParent()
+EEntity::EEntity()
 {
-    return ParentEntity;
 }
 
-void EEntity::SetParent(FEntityRef parent)
+EEntity::~EEntity()
 {
-    ParentEntity = parent;
 }
 
-void EEntity::AddChild(FEntityRef child)
+void EEntity::Spawn(FEntityRef parent)
 {
-    ChildEntities.insert(child);
 }
 
-void EEntity::RemoveChild(FEntityRef child)
+void EEntity::Update()
 {
-    ChildEntities.erase(child);
 }
+
+void EEntity::Kill()
+{
+}
+
+bool EEntity::ShouldRelease()
+{
+	return false;
+}
+
 C3_NAMESPACE_END

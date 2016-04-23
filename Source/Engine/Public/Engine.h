@@ -17,5 +17,4 @@ private:
     FEntityManager EntityManager;
     FEntityRef Scene;
 };
-
 C3_NAMESPACE_END

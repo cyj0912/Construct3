@@ -6,7 +6,7 @@ C3_DEFINE_ENTITY(EActor)
 
 void GenRandomString(std::string& buffer, int len)
 {
-    std::srand(std::time(nullptr));
+    std::srand((unsigned int) std::time(nullptr));
     static const char candidates[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     for(int i = 0; i < len; i++)
     {
@@ -21,12 +21,7 @@ EActor::EActor()
     Name = "actor." + buf;
 }
 
-EActor::EActor(const std::string& name)
-{
-    Name = name;
-}
-
-const std::string& EActor::GetName()
+const std::string& EActor::GetName() const
 {
     return Name;
 }

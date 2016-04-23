@@ -81,7 +81,6 @@ void FRender::RenderOneFrame()
 	glm::mat4 matProj = glm::perspectiveLH(1.5f, (float)Width / (float)Height, 0.1f, 100.0f);
     glm::mat4 matMV = matView * matModel;
     glm::mat4 matMVP = matProj * matMV;
-	glm::vec4 result = matMVP * glm::vec4(1, 1, 1, 1);
     GLint uMVPLoc = glGetUniformLocation(Shader2D->Program, "uMVP");
     glUniformMatrix4fv(uMVPLoc, 1, GL_FALSE, value_ptr(matMVP));
 	glDisable(GL_CULL_FACE);
@@ -104,7 +103,6 @@ void FRender::RenderOneFrame()
     nvgFontFace(vg, "normal");
     nvgText(vg, 0, 150, ss.str().c_str(), nullptr);
     nvgEndFrame(vg);
-
 }
 
 void FRender::RenderSprite(const FSpriteDesc& desc)

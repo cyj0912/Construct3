@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include <GLGameWindow.h>
+#include <Log.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -13,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
     container->setFocusPolicy(Qt::TabFocus);
     ui->horizontalLayout->addWidget(container);
     ui->horizontalLayout->setMargin(0);
+
+	ui->logText->setLineWrapMode(QPlainTextEdit::NoWrap);
 }
 
 MainWindow::~MainWindow()
@@ -23,4 +26,10 @@ MainWindow::~MainWindow()
 void MainWindow::on_actionExit_triggered()
 {
     this->close();
+}
+
+void MainWindow::OnLogChanged()
+{
+    //ui->logText->setPlainText(c3::FLog::GetBuffer());
+	ui->logText->appendPlainText(c3::FLog::ReadBuffer().c_str());
 }

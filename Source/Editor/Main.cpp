@@ -6,7 +6,7 @@
 #include <QSurfaceFormat>
 #include "MainWindow.h"
 #include "EngineLoader.h"
-#include <RuntimeContext.h>
+#include "Editor.h"
 
 int main(int argc, char *argv[])
 {
@@ -48,6 +48,9 @@ int main(int argc, char *argv[])
     c3::RC.Loader = &EngineLoader;
     c3::RC.Loader->InitEngine();
 
+    c3::FEditor EditorControl;
+    c3::RC.Editor = &EditorControl;
+
     QSurfaceFormat format;
     format.setVersion(4, 5);
     format.setProfile(QSurfaceFormat::CoreProfile);
@@ -56,6 +59,9 @@ int main(int argc, char *argv[])
     QSurfaceFormat::setDefaultFormat(format);
 
     MainWindow mainWindow;
+	c3::FLogDisplay* LogDisplay = static_cast<c3::FLogDisplay*>(EditorControl.GetLogDisplay());
+    QObject::connect(LogDisplay, &c3::FLogDisplay::LogRefreshed,
+                     &mainWindow, &MainWindow::OnLogChanged);
 	mainWindow.showMaximized();
     app.exec();
 }

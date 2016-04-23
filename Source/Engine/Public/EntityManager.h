@@ -8,14 +8,16 @@ class FEntityManager
 {
 public:
     EEntity* NewEntity(TypeId id);
-
+	template <typename T> T* NewEntity(TypeId id)
+	{
+		return static_cast<T*>(NewEntity(id));
+	}
     template <typename T> T* NewEntity()
     {
         T* p = static_cast<T*>(GetNewInstance<T>());
         AllocatedEntities.push_back(p);
         return p;
     }
-
     void ReleaseMemory();
 private:
     std::vector<EEntity*> AllocatedEntities;
