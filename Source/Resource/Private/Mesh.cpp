@@ -18,19 +18,27 @@ RMesh::RMesh(const std::string &identifier)
     const aiScene * scene = aiImportFile(RFile::GetPhysicalPath(identifier).c_str(),
                                          aiProcessPreset_TargetRealtime_MaxQuality);
     aiMesh* mesh = scene->mMeshes[0];
-    for (unsigned int i = 0; i < scene->mMeshes[0]->mNumVertices; i++)
+    for (unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
-        Vertices.push_back(scene->mMeshes[0]->mVertices[i].x);
-        Vertices.push_back(scene->mMeshes[0]->mVertices[i].y);
-        Vertices.push_back(scene->mMeshes[0]->mVertices[i].z);
-        UVs.push_back(mesh->mTextureCoords[0][i].x);
-        UVs.push_back(mesh->mTextureCoords[0][i].y);
+        Vertices.push_back(mesh->mVertices[i].x);
+        Vertices.push_back(mesh->mVertices[i].y);
+        Vertices.push_back(mesh->mVertices[i].z);
+        if(mesh->HasTextureCoords(0))
+        {
+            UVs.push_back(mesh->mTextureCoords[0][i].x);
+            UVs.push_back(mesh->mTextureCoords[0][i].y);
+        }
+        else
+        {
+            UVs.push_back((float)i * (1 / (float)mesh->mNumVertices));
+            UVs.push_back((mesh->mNumVertices - i) * (1 / (float)mesh->mNumVertices));
+        }
     }
-    for (unsigned int i = 0; i < scene->mMeshes[0]->mNumFaces; i++)
+    for (unsigned int i = 0; i < mesh->mNumFaces; i++)
     {
-        Indices.push_back(scene->mMeshes[0]->mFaces[i].mIndices[0]);
-        Indices.push_back(scene->mMeshes[0]->mFaces[i].mIndices[1]);
-        Indices.push_back(scene->mMeshes[0]->mFaces[i].mIndices[2]);
+        Indices.push_back(mesh->mFaces[i].mIndices[0]);
+        Indices.push_back(mesh->mFaces[i].mIndices[1]);
+        Indices.push_back(mesh->mFaces[i].mIndices[2]);
     }
     aiReleaseImport(scene);
 }

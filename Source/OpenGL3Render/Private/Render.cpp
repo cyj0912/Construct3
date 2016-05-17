@@ -51,11 +51,10 @@ void FRender::PrepareGL()
 	Shader2D = new FShader;
 	Shader2D->Load();
 
-	RMesh* rm = new RMesh("demobox.obj");
-	rm->LoadMesh();
-	Mesh = new FRenderMesh(rm);
+	FAutoRefPtr<RMesh> rmesh = new RMesh("error.obj");
+	rmesh->LoadMesh();
+	Mesh = new FRenderMesh(rmesh);
     Mesh->Prepare();
-	rm->Release();
     glEnable(GL_CULL_FACE);
 	//glDisable(GL_CULL_FACE);
     vg = nvgCreateGL3(NVG_ANTIALIAS | NVG_STENCIL_STROKES);

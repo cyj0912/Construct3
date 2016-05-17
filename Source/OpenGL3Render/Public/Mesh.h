@@ -12,7 +12,7 @@ public:
     void Prepare();
     void Draw() const;
 private:
-    RMesh* Resource;
+    FAutoRefPtr<RMesh> ResourceRef;
     GLuint LocalVAO, LocalVertices, LocalUVs, LocalIndices;
 };
 C3_NAMESPACE_END

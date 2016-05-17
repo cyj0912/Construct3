@@ -2,27 +2,13 @@
 C3_NAMESPACE_BEGIN
 RResource::~RResource()
 {
+	if (Parent)
+		Parent->Release();
 }
 
 RResource::RResource()
-    : RefCount(0), Parent(nullptr)
+    : Parent(nullptr)
 {
-    AddRef();
-}
-
-void RResource::AddRef()
-{
-    RefCount++;
-}
-
-void RResource::Release()
-{
-    auto a = RefCount--;
-	if (a == 0)
-	{
-		delete this;
-		Parent->Release();
-	}
 }
 
 RResource* RResource::GetParent() const

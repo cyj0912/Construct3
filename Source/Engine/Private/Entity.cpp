@@ -4,27 +4,26 @@
 #include <sstream>
 #include <Log.h>
 C3_NAMESPACE_BEGIN
-C3_DEFINE_ENTITY(EEntity)
 
-void FCompContainer::AttachComponent(FEntityRef ref)
+void FHasComponents::AttachComponent(FEntityRef ref)
 {
     TypeId id = typeid(ref).hash_code();
     Components[id] = ref;
 }
 
-FEntityRef FCompContainer::GetComponent(TypeId typeId)
+FEntityRef FHasComponents::GetComponent(TypeId typeId)
 {
     if(Components.find(typeId) != Components.end())
         return Components[typeId];
     return nullptr;
 }
 
-void FCompContainer::DetachComponent(TypeId typeId)
+void FHasComponents::DetachComponent(TypeId typeId)
 {
     Components.erase(typeId);
 }
 
-void FCompContainer::PrintCompInfo()
+void FHasComponents::PrintCompInfo()
 {
     for(auto i : Components)
     {
@@ -33,6 +32,8 @@ void FCompContainer::PrintCompInfo()
         FLog::Debug(ss.str().c_str());
     }
 }
+
+C3_DEFINE_ENTITY(EEntity)
 
 EEntity::EEntity()
 {
@@ -44,6 +45,9 @@ EEntity::~EEntity()
 
 void EEntity::Spawn(FEntityRef parent)
 {
+	SetParent(parent);
+	if(parent != nullptr)
+		parent->AddChild(this);
 }
 
 void EEntity::Update()

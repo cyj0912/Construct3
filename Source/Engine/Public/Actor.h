@@ -2,13 +2,16 @@
 #include <Core.h>
 #include "Entity.h"
 #include <string>
+#include <tuple>
 
 C3_NAMESPACE_BEGIN
 
-class EActor : public EEntity, public FCompContainer
+class AActor : public EEntity, public FHasComponents
 {
+	C3_DECLARE_ENTITY(AActor)
+    friend class FMetaEntityAActor;
 public:
-    EActor();
+    AActor();
     const std::string& GetName() const;
     void SetName(const std::string& name);
 private:

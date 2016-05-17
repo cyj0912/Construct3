@@ -15,6 +15,7 @@ public:
 
 class CTransform : public CComponent
 {
+	C3_DECLARE_ENTITY(CTransform)
 public:
     CTransform()
     {

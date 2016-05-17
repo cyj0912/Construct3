@@ -1,9 +1,11 @@
+#include <Core.h>
 #include "Engine.h"
-#include "System.h"
 #include "Scene.h"
 C3_NAMESPACE_BEGIN
 FEngine::FEngine()
 {
+    FLog::Debug("Construct 3 Engine");
+    FLog::Debug("Version 0.1");
 }
 
 FEngine::~FEngine()

@@ -21,14 +21,9 @@ std::string FLog::ReadBuffer()
 
 void FLog::Debug(const char* msg)
 {
-	static bool first = true;
-	if (first)
-	{
-        DataBuffer.SS << "------------------ Log ------------------" << std::endl;
-		first = false;
-	}
     DataBuffer.SS << msg << std::endl;
 
-    RC.Editor->GetLogDisplay()->Refresh();
+	if(RC.Editor && RC.Editor->GetLogDisplay())
+    	RC.Editor->GetLogDisplay()->Refresh();
 }
 C3_NAMESPACE_END

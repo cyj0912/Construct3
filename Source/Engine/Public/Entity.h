@@ -6,9 +6,7 @@
 #include <unordered_map>
 
 C3_NAMESPACE_BEGIN
-
 class EEntity;
-
 class FEntityRef
 {
 public:
@@ -22,6 +20,11 @@ public:
 	bool operator==(void* rhs) const
 	{
 		return Pointer == rhs;
+	}
+
+	bool operator!=(void* rhs) const
+	{
+		return Pointer != nullptr;
 	}
 
     EEntity* operator->() const
@@ -66,6 +69,11 @@ public:
         ParentEntity = parent;
     }
 
+	size_t CountChildren()
+    {
+		return ChildEntities.size();
+    }
+
     typename FChildren::iterator GetBeginChild()
     {
         return ChildEntities.begin();
@@ -90,7 +98,7 @@ private:
     FChildren ChildEntities;
 };
 
-class FCompContainer
+class FHasComponents
 {
 public:
     void AttachComponent(FEntityRef ref);
@@ -110,13 +118,13 @@ private:
 
 class EEntity : public FNode<FEntityRef>
 {
+	C3_DECLARE_EENTITY()
 public:
     EEntity();
     virtual ~EEntity();
     virtual void Spawn(FEntityRef parent = nullptr);
     virtual void Update();
     virtual void Kill();
-	virtual bool ShouldRelease();
+	virtual bool ShouldRelease(); //Delete entity when true
 };
-
 C3_NAMESPACE_END

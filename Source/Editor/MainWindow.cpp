@@ -30,6 +30,5 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::OnLogChanged()
 {
-    //ui->logText->setPlainText(c3::FLog::GetBuffer());
 	ui->logText->appendPlainText(c3::FLog::ReadBuffer().c_str());
 }

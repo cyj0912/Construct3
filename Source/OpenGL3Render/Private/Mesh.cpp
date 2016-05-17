@@ -2,27 +2,24 @@
 #include <Resource/Public/Mesh.h>
 #include <glad/glad.h>
 C3_NAMESPACE_BEGIN
-FRenderMesh::FRenderMesh() : Resource(nullptr)
+FRenderMesh::FRenderMesh()
 {
 }
 
 FRenderMesh::FRenderMesh(RMesh *mesh)
 {
-    Resource = mesh;
-    Resource->AddRef();
+    ResourceRef = mesh;
 }
 
 FRenderMesh::~FRenderMesh()
 {
-    if(Resource)
-        Resource->Release();
 }
 
 void FRenderMesh::Prepare()
 {
-    if(Resource)
+    if(ResourceRef)
     {
-        RMesh& mesh = *Resource;
+        RMesh& mesh = *ResourceRef;
         glGenVertexArrays(1, &LocalVAO);
         glBindVertexArray(LocalVAO);
         glGenBuffers(1, &LocalVertices);
@@ -76,9 +73,9 @@ void FRenderMesh::Draw() const
 {
     glBindVertexArray(LocalVAO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, LocalIndices);
-    if(Resource)
+    if(ResourceRef)
     {
-        glDrawElements(GL_TRIANGLES, Resource->Indices.size(), GL_UNSIGNED_SHORT, (void*)0);
+        glDrawElements(GL_TRIANGLES, ResourceRef->Indices.size(), GL_UNSIGNED_SHORT, (void*)0);
     }
 	else
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, (void*)0);

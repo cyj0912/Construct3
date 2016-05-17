@@ -2,7 +2,17 @@
 #include <cstdlib>
 #include <ctime>
 C3_NAMESPACE_BEGIN
-C3_DEFINE_ENTITY(EActor)
+C3_DEFINE_ENTITY(AActor)
+
+class FMetaEntityAActor
+{
+public:
+    FMetaEntityAActor()
+    {
+        auto NameList = { "Name" };
+        auto PropList = std::make_tuple(&AActor::Name);
+    }
+};
 
 void GenRandomString(std::string& buffer, int len)
 {
@@ -14,19 +24,19 @@ void GenRandomString(std::string& buffer, int len)
     }
 }
 
-EActor::EActor()
+AActor::AActor()
 {
     std::string buf;
     GenRandomString(buf, 8);
     Name = "actor." + buf;
 }
 
-const std::string& EActor::GetName() const
+const std::string& AActor::GetName() const
 {
     return Name;
 }
 
-void EActor::SetName(const std::string &name)
+void AActor::SetName(const std::string &name)
 {
     Name = name;
 }

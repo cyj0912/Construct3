@@ -1,21 +1,20 @@
 #include "Camera.h"
-#include "Component.h"
 C3_NAMESPACE_BEGIN
-C3_DEFINE_ENTITY(ECamera)
+C3_DEFINE_ENTITY(ACamera)
 
-void ECamera::Spawn(FEntityRef parent)
+void ACamera::Spawn(FEntityRef parent)
 {
-    EActor::Spawn(parent);
+	AActor::Spawn(parent);
 }
 
-void ECamera::Update()
+void ACamera::Update()
 {
-	EActor::Update();
+	AActor::Update();
 }
 
-void ECamera::Kill()
+void ACamera::Kill()
 {
-	EActor::Kill();
+	AActor::Kill();
 }
 
 C3_NAMESPACE_END
