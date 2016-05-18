@@ -4,7 +4,6 @@
 #include <QKeyEvent>
 #include <sstream>
 #include <string>
-#include <Command.h>
 #include <functional>
 
 using c3::FRender;

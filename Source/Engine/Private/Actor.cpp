@@ -4,6 +4,8 @@
 C3_NAMESPACE_BEGIN
 C3_DEFINE_ENTITY(AActor)
 
+// TODO:
+// This is important
 class FMetaEntityAActor
 {
 public:
