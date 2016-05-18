@@ -15,33 +15,66 @@ public:
     void Release();
 };
 
+/*
+ * Reference counting rules:
+ *   1. Constructors automatically increments refcount, you must bind rvalue pointers to a lvalue.
+ *   2. lvalue pointers take ownership, Release() it before going out of scope.
+ *
+ *   FAutoRefPtr steals ownership from rvalue pointers, shares ownership with lvalue pointers
+ */
+
 template <typename T>
 class FAutoRefPtr
 {
     T* Pointer;
 public:
+    //Default constructor
     FAutoRefPtr() : Pointer(nullptr) {}
-    FAutoRefPtr(T* assign) : Pointer(assign) {}
 
     FAutoRefPtr(const FAutoRefPtr& from)
     {
         Pointer = from.Pointer;
         Pointer->AddRef();
     }
-    FAutoRefPtr & operator=(T* assign)
+    FAutoRefPtr(FAutoRefPtr&& from)
+    {
+        Pointer = from.Pointer;
+        from.Pointer = nullptr;
+    }
+    FAutoRefPtr & operator=(const FAutoRefPtr& from)
     {
         Clear();
-        Pointer = assign;
+        Pointer = from.Pointer;
         Pointer->AddRef();
         return *this;
     }
-    FAutoRefPtr & operator=(const FAutoRefPtr& another)
+    FAutoRefPtr & operator=(FAutoRefPtr&& from)
     {
         Clear();
-        Pointer = another.Pointer;
+        Pointer = from.Pointer;
+        from.Pointer = nullptr;
+        return *this;
+    }
+
+    FAutoRefPtr(T* & from) : Pointer(from)
+    {
+        Pointer->AddRef();
+    }
+    FAutoRefPtr(T* && from) : Pointer(from) {}
+    FAutoRefPtr & operator=(T* & from)
+    {
+        Clear();
+        Pointer = from;
         Pointer->AddRef();
         return *this;
     }
+    FAutoRefPtr & operator=(T* && from)
+    {
+        Clear();
+        Pointer = from;
+        return *this;
+    }
+
     ~FAutoRefPtr()
     {
         Clear();
@@ -64,7 +97,12 @@ public:
         return Pointer;
     }
 
-    operator T*() const
+    explicit operator bool() const
+    {
+        return Pointer != nullptr;
+    }
+
+    explicit operator T*() const
     {
         return Pointer;
     }

@@ -1,8 +1,7 @@
 #include "Pointer.h"
 C3_NAMESPACE_BEGIN
-FRefCount::FRefCount() : RefCount(0)
+FRefCount::FRefCount() : RefCount(1)
 {
-    AddRef();
 }
 
 FRefCount::~FRefCount()
