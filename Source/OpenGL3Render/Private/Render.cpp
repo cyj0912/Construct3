@@ -53,7 +53,7 @@ void FRender::PrepareGL()
 
 	FAutoRefPtr<RMesh> rmesh = new RMesh("error.obj");
 	rmesh->LoadMesh();
-	Mesh = new FRenderMesh(rmesh);
+	Mesh = new FRenderMesh((RMesh*)rmesh);
     Mesh->Prepare();
     glEnable(GL_CULL_FACE);
 	//glDisable(GL_CULL_FACE);
