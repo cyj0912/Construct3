@@ -48,5 +48,14 @@ void FShader::Bind()
 	glUseProgram(Program);
 }
 
-
+void FShader::Uniform(EUniformLocation loc, void *data)
+{
+	switch (loc)
+    {
+        case EUniformLocation::MVP:
+            GLint uMVPLoc = glGetUniformLocation(Program, "uMVP");
+            glUniformMatrix4fv(uMVPLoc, 1, GL_FALSE, (const GLfloat*)data);
+            break;
+    }
+}
 C3_NAMESPACE_END

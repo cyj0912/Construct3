@@ -15,7 +15,7 @@
 #include <nanovg_gl.h>
 C3_NAMESPACE_BEGIN
 
-FShader* Shader2D;
+FShader* Shader3D;
 FRenderModel* Mesh;
 struct NVGcontext* vg;
 int image;
@@ -48,8 +48,8 @@ void FRender::PrepareGL()
 	//glClearColor(0.899f, 0.96f, 1.0f, 1.0f);
 	glClearColor(0, 0, 0, 0);
 	glClearDepth(1);
-	Shader2D = new FShader;
-	Shader2D->Load();
+	Shader3D = new FShader;
+	Shader3D->Load();
 
 	FAutoRefPtr<RMesh> rmesh = new RMesh("error.obj");
 	rmesh->LoadMesh();
@@ -70,7 +70,7 @@ void FRender::RenderOneFrame()
     RenderSprite(FSpriteDesc());
     nvgEndFrame(vg);
 
-    Shader2D->Bind();
+    Shader3D->Bind();
 	glm::mat4 matModel = glm::rotate(glm::mat4(1.0f), RC.System->GetSystemClock()->GetGameTime(), glm::vec3(0.0f, 1.0f, 0.0f));
     //glm::mat4 matView = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -1.0f + RC.System->GetSystemClock()->GetGameTime()));
 	glm::mat4 matView = glm::lookAt(glm::vec3(0, 0, 10.0f), glm::vec3(), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -80,8 +80,7 @@ void FRender::RenderOneFrame()
 	glm::mat4 matProj = glm::perspective(1.5f, (float)Width / (float)Height, 0.1f, 100.0f);
     glm::mat4 matMV = matView * matModel;
     glm::mat4 matMVP = matProj * matMV;
-    GLint uMVPLoc = glGetUniformLocation(Shader2D->Program, "uMVP");
-    glUniformMatrix4fv(uMVPLoc, 1, GL_FALSE, value_ptr(matMVP));
+	Shader3D->Uniform(FShader::EUniformLocation::MVP, value_ptr(matMVP));
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CCW); //Initial
 	glEnable(GL_DEPTH_TEST);
@@ -90,8 +89,7 @@ void FRender::RenderOneFrame()
 
     matModel = glm::translate(glm::mat4(), glm::vec3(-5.0f, 2.0f, 5.0f));
     matMVP = matProj * matView * matModel;
-    uMVPLoc = glGetUniformLocation(Shader2D->Program, "uMVP");
-    glUniformMatrix4fv(uMVPLoc, 1, GL_FALSE, value_ptr(matMVP));
+	Shader3D->Uniform(FShader::EUniformLocation::MVP, value_ptr(matMVP));
     Mesh->Draw();
 
     nvgBeginFrame(vg, Width, Height, 1.0f);
@@ -148,13 +146,12 @@ void FRender::Push2DCommand(ICommand* pCmd)
 
 void FRender::RenderModel(FShader* shader, FRenderModel* mesh, float* transformMat4)
 {
-    Shader2D->Bind();
-    GLint uMVPLoc = glGetUniformLocation(Shader2D->Program, "uMVP");
-    glUniformMatrix4fv(uMVPLoc, 1, GL_FALSE, transformMat4);
-    glDisable(GL_CULL_FACE);
-    glFrontFace(GL_CW);
+    shader->Bind();
+    shader->Uniform(FShader::EUniformLocation::MVP, transformMat4);
+    glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CCW); //Initial
     glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
-    Mesh->Draw();
+    glDepthFunc(GL_LESS); //Initial
+    mesh->Draw();
 }
 C3_NAMESPACE_END
