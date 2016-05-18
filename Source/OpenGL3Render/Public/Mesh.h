@@ -7,7 +7,7 @@ class FRenderMesh
 {
 public:
     FRenderMesh();
-    FRenderMesh(RMesh* mesh);
+    FRenderMesh(const FAutoRefPtr<RMesh> & mesh);
     ~FRenderMesh();
     void Prepare();
     void Draw() const;
