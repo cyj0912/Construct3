@@ -1,5 +1,5 @@
 #include "Model.h"
-#include <Resource/Public/Mesh.h>
+#include <Mesh.h>
 #include <glad/glad.h>
 C3_NAMESPACE_BEGIN
 FRenderModel::FRenderModel()

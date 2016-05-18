@@ -1,18 +1,23 @@
+#include <Core.h>
+#include <Mesh.h>
+#include <File.h>
+#include "Model.h"
 #include "Render.h"
+#include "Shader.h"
+
+//Standard Library and Thridparty
+#include <sstream>
+
 #include <glad/glad.h>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "Shader.h"
-#include "Model.h"
-#include <Resource/Public/Mesh.h>
-#include <Log.h>
-#include <File.h>
-#include <System.h>
-#include <sstream>
+
 #include <nanovg.h>
 #define NANOVG_GL3_IMPLEMENTATION
 #include <nanovg_gl.h>
+
 C3_NAMESPACE_BEGIN
 
 FShader* Shader3D;
