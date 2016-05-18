@@ -73,21 +73,26 @@ void FRender::RenderOneFrame()
     Shader2D->Bind();
 	glm::mat4 matModel = glm::rotate(glm::mat4(1.0f), RC.System->GetSystemClock()->GetGameTime(), glm::vec3(0.0f, 1.0f, 0.0f));
     //glm::mat4 matView = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -1.0f + RC.System->GetSystemClock()->GetGameTime()));
-	glm::mat4 matView = glm::lookAtLH(glm::vec3(0, 0, -10.0f), glm::vec3(), glm::vec3(0.0f, 1.0f, 0.0f));
-    float PixelsPerUnit = 100.0f;
+	glm::mat4 matView = glm::lookAt(glm::vec3(0, 0, 10.0f), glm::vec3(), glm::vec3(0.0f, 1.0f, 0.0f));
+    //float PixelsPerUnit = 100.0f;
     //glm::mat4 matProj = glm::ortho(-Width / 2.0f / PixelsPerUnit, Width / 2.0f / PixelsPerUnit,
     //                               -Height / 2.0f / PixelsPerUnit, Height / 2.0f / PixelsPerUnit);
-	glm::mat4 matProj = glm::perspectiveLH(1.5f, (float)Width / (float)Height, 0.1f, 100.0f);
+	glm::mat4 matProj = glm::perspective(1.5f, (float)Width / (float)Height, 0.1f, 100.0f);
     glm::mat4 matMV = matView * matModel;
     glm::mat4 matMVP = matProj * matMV;
     GLint uMVPLoc = glGetUniformLocation(Shader2D->Program, "uMVP");
     glUniformMatrix4fv(uMVPLoc, 1, GL_FALSE, value_ptr(matMVP));
-	glDisable(GL_CULL_FACE);
-	glFrontFace(GL_CW);
+	glEnable(GL_CULL_FACE);
+	glFrontFace(GL_CCW); //Initial
 	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
+	glDepthFunc(GL_LESS); //Initial
     Mesh->Draw();
 
+    matModel = glm::translate(glm::mat4(), glm::vec3(-5.0f, 2.0f, 5.0f));
+    matMVP = matProj * matView * matModel;
+    uMVPLoc = glGetUniformLocation(Shader2D->Program, "uMVP");
+    glUniformMatrix4fv(uMVPLoc, 1, GL_FALSE, value_ptr(matMVP));
+    Mesh->Draw();
 
     nvgBeginFrame(vg, Width, Height, 1.0f);
 	for(auto cmd : CommandQueue2D)
