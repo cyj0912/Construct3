@@ -3,12 +3,12 @@
 #include <glad/glad.h>
 C3_NAMESPACE_BEGIN
 class RMesh;
-class FRenderMesh
+class FRenderModel
 {
 public:
-    FRenderMesh();
-    FRenderMesh(const FAutoRefPtr<RMesh> & mesh);
-    ~FRenderMesh();
+    FRenderModel();
+    FRenderModel(const FAutoRefPtr<RMesh> & mesh);
+    ~FRenderModel();
     void Prepare();
     void Draw() const;
 private:

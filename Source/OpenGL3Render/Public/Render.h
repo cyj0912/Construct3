@@ -11,7 +11,7 @@ struct FSpriteDesc
 };
 
 class FShader;
-class FRenderMesh;
+class FRenderModel;
 
 class IRender
 {
@@ -40,7 +40,7 @@ public:
 	void DrawControl(float x, float y, float w, float h) override;
 	void RenderText(std::string text);
 	void Push2DCommand(ICommand* pCmd);
-	void RenderModel(FShader* shader, FRenderMesh* mesh, float* transformMat4);
+	void RenderModel(FShader* shader, FRenderModel* mesh, float* transformMat4);
 
 private:
 	int Width, Height;

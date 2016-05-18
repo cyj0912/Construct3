@@ -4,7 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Shader.h"
-#include "Mesh.h"
+#include "Model.h"
 #include <Resource/Public/Mesh.h>
 #include <Log.h>
 #include <File.h>
@@ -16,7 +16,7 @@
 C3_NAMESPACE_BEGIN
 
 FShader* Shader2D;
-FRenderMesh* Mesh;
+FRenderModel* Mesh;
 struct NVGcontext* vg;
 int image;
 FRender::FRender()
@@ -53,7 +53,7 @@ void FRender::PrepareGL()
 
 	FAutoRefPtr<RMesh> rmesh = new RMesh("error.obj");
 	rmesh->LoadMesh();
-	Mesh = new FRenderMesh(rmesh);
+	Mesh = new FRenderModel(rmesh);
     Mesh->Prepare();
     glEnable(GL_CULL_FACE);
 	//glDisable(GL_CULL_FACE);
@@ -146,7 +146,7 @@ void FRender::Push2DCommand(ICommand* pCmd)
 	CommandQueue2D.push_back(pCmd);
 }
 
-void FRender::RenderModel(FShader* shader, FRenderMesh* mesh, float* transformMat4)
+void FRender::RenderModel(FShader* shader, FRenderModel* mesh, float* transformMat4)
 {
     Shader2D->Bind();
     GLint uMVPLoc = glGetUniformLocation(Shader2D->Program, "uMVP");

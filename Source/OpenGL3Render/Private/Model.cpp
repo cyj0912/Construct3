@@ -1,21 +1,21 @@
-#include "Mesh.h"
+#include "Model.h"
 #include <Resource/Public/Mesh.h>
 #include <glad/glad.h>
 C3_NAMESPACE_BEGIN
-FRenderMesh::FRenderMesh()
+FRenderModel::FRenderModel()
 {
 }
 
-FRenderMesh::FRenderMesh(const FAutoRefPtr<RMesh> &mesh)
+FRenderModel::FRenderModel(const FAutoRefPtr<RMesh> &mesh)
 {
     ResourceRef = mesh;
 }
 
-FRenderMesh::~FRenderMesh()
+FRenderModel::~FRenderModel()
 {
 }
 
-void FRenderMesh::Prepare()
+void FRenderModel::Prepare()
 {
     if(ResourceRef)
     {
@@ -69,7 +69,7 @@ void FRenderMesh::Prepare()
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices, GL_STATIC_DRAW);
 }
 
-void FRenderMesh::Draw() const
+void FRenderModel::Draw() const
 {
     glBindVertexArray(LocalVAO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, LocalIndices);

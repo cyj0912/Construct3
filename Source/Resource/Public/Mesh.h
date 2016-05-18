@@ -5,7 +5,7 @@
 C3_NAMESPACE_BEGIN
 class RMesh : public RResource
 {
-    friend class FRenderMesh;
+    friend class FRenderModel;
 public:
     RMesh();
     RMesh(RResource* file);
