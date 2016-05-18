@@ -7,13 +7,16 @@ class FShader
 public:
     enum class EUniformLocation
     {
-        MVP
+		MV,
+        MVP,
+		Normal
     };
 	FShader();
 	void Load();
-	void Bind();
-	void Uniform(EUniformLocation loc, void* data);
-public:
+	void Unload();
+	void Bind() const;
+	void Uniform(EUniformLocation loc, void* data) const;
+private:
 	unsigned int VertexShader, FragmentShader, Program;
 };
 C3_NAMESPACE_END

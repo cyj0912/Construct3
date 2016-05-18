@@ -4,6 +4,7 @@
 #include "Model.h"
 #include "Render.h"
 #include "Shader.h"
+#include "SceneGraph.h"
 
 //Standard Library and Thridparty
 #include <sstream>
@@ -13,6 +14,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
 
 #include <nanovg.h>
 #define NANOVG_GL3_IMPLEMENTATION
@@ -56,7 +58,7 @@ void FRender::PrepareGL()
 	Shader3D = new FShader;
 	Shader3D->Load();
 
-	FAutoRefPtr<RMesh> rmesh = new RMesh("error.obj");
+	FAutoRefPtr<RMesh> rmesh = new RMesh("bunny.fbx");
 	rmesh->LoadMesh();
 	Mesh = new FRenderModel(rmesh);
     Mesh->Prepare();
@@ -77,25 +79,31 @@ void FRender::RenderOneFrame()
 
     Shader3D->Bind();
 	glm::mat4 matModel = glm::rotate(glm::mat4(1.0f), RC.System->GetSystemClock()->GetGameTime(), glm::vec3(0.0f, 1.0f, 0.0f));
+	matModel = glm::scale(matModel, glm::vec3(2.0f));
     //glm::mat4 matView = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -1.0f + RC.System->GetSystemClock()->GetGameTime()));
-	glm::mat4 matView = glm::lookAt(glm::vec3(0, 0, 10.0f), glm::vec3(), glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 matView = glm::lookAt(glm::vec3(0, 5.0f, 15.0f), glm::vec3(), glm::vec3(0.0f, 1.0f, 0.0f));
     //float PixelsPerUnit = 100.0f;
     //glm::mat4 matProj = glm::ortho(-Width / 2.0f / PixelsPerUnit, Width / 2.0f / PixelsPerUnit,
     //                               -Height / 2.0f / PixelsPerUnit, Height / 2.0f / PixelsPerUnit);
 	glm::mat4 matProj = glm::perspective(1.5f, (float)Width / (float)Height, 0.1f, 100.0f);
     glm::mat4 matMV = matView * matModel;
     glm::mat4 matMVP = matProj * matMV;
+	glm::mat3 matNormal = glm::inverseTranspose(glm::mat3(matMV));
+	Shader3D->Uniform(FShader::EUniformLocation::MV, value_ptr(matMV));
 	Shader3D->Uniform(FShader::EUniformLocation::MVP, value_ptr(matMVP));
+	Shader3D->Uniform(FShader::EUniformLocation::Normal, value_ptr(matNormal));
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CCW); //Initial
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS); //Initial
+	glEnable(GL_FRAMEBUFFER_SRGB);
     Mesh->Draw();
+	glDisable(GL_FRAMEBUFFER_SRGB);
 
-    matModel = glm::translate(glm::mat4(), glm::vec3(-5.0f, 2.0f, 5.0f));
-    matMVP = matProj * matView * matModel;
-	Shader3D->Uniform(FShader::EUniformLocation::MVP, value_ptr(matMVP));
-    Mesh->Draw();
+    //matModel = glm::translate(glm::mat4(), glm::vec3(-5.0f, 2.0f, 5.0f));
+    //matMVP = matProj * matView * matModel;
+	//Shader3D->Uniform(FShader::EUniformLocation::MVP, value_ptr(matMVP));
+    //Mesh->Draw();
 
     nvgBeginFrame(vg, Width, Height, 1.0f);
 	for(auto cmd : CommandQueue2D)

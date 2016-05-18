@@ -17,5 +17,6 @@ private:
     std::vector<float> Vertices;
     std::vector<unsigned short> Indices;
     std::vector<float> UVs;
+	std::vector<float> Normals;
 };
 C3_NAMESPACE_END

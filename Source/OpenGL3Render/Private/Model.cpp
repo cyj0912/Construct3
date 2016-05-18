@@ -32,6 +32,18 @@ void FRenderModel::Prepare()
         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh.UVs.size(), &mesh.UVs[0], GL_STATIC_DRAW);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, static_cast<void*>(0));
         glEnableVertexAttribArray(1);
+		if(mesh.Normals.size() != 0)
+		{
+			glGenBuffers(1, &LocalNormals);
+			glBindBuffer(GL_ARRAY_BUFFER, LocalNormals);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh.Normals.size(), &mesh.Normals[0], GL_STATIC_DRAW);
+			glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, static_cast<void*>(0));
+			glEnableVertexAttribArray(2);
+		}
+		else
+		{
+			glDisableVertexAttribArray(2);
+		}
         glGenBuffers(1, &LocalIndices);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, LocalIndices);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * mesh.Indices.size(), &mesh.Indices[0], GL_STATIC_DRAW);

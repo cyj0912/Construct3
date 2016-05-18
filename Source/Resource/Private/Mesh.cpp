@@ -16,13 +16,23 @@ RMesh::RMesh(RResource *file)
 RMesh::RMesh(const std::string &identifier)
 {
     const aiScene * scene = aiImportFile(RFile::GetPhysicalPath(identifier).c_str(),
-                                         aiProcessPreset_TargetRealtime_MaxQuality);
+		aiProcessPreset_TargetRealtime_Fast);
     aiMesh* mesh = scene->mMeshes[0];
+	Vertices.reserve(mesh->mNumVertices * 3);
+	Normals.reserve(mesh->mNumVertices * 3);
+	UVs.reserve(mesh->mNumVertices * 2);
+	Indices.reserve(mesh->mNumFaces * 3);
     for (unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
         Vertices.push_back(mesh->mVertices[i].x);
         Vertices.push_back(mesh->mVertices[i].y);
         Vertices.push_back(mesh->mVertices[i].z);
+		if(mesh->HasNormals())
+		{
+			Normals.push_back(mesh->mNormals[i].x);
+			Normals.push_back(mesh->mNormals[i].y);
+			Normals.push_back(mesh->mNormals[i].z);
+		}
         if(mesh->HasTextureCoords(0))
         {
             UVs.push_back(mesh->mTextureCoords[0][i].x);
