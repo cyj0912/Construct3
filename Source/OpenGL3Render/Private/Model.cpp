@@ -50,6 +50,7 @@ void FRenderModel::Prepare()
         return;
     }
 
+	//Default model when there is no file loaded, a square
     float Vertices[] = { 1.0f, 1.0f,
                          1.0f, -1.0f,
                          -1.0f, -1.0f,

@@ -6,3 +6,4 @@
 #include "System.h"
 #include "Log.h"
 #include "Pointer.h"
+#include "Command.h"

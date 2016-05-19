@@ -24,6 +24,7 @@ C3_NAMESPACE_BEGIN
 
 FShader* Shader3D;
 FRenderModel* Mesh;
+FRenderModel* MeshErr;
 struct NVGcontext* vg;
 int image;
 FRender::FRender()
@@ -62,8 +63,12 @@ void FRender::PrepareGL()
 	rmesh->LoadMesh();
 	Mesh = new FRenderModel(rmesh);
     Mesh->Prepare();
-    glEnable(GL_CULL_FACE);
-	//glDisable(GL_CULL_FACE);
+
+	rmesh = new RMesh("error.obj");
+	rmesh->LoadMesh();
+	MeshErr = new FRenderModel(rmesh);
+	MeshErr->Prepare();
+
     vg = nvgCreateGL3(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
 
 	nvgCreateFont(vg, "normal", RFile::GetPhysicalPath("Roboto-Light.ttf").c_str());
@@ -77,11 +82,17 @@ void FRender::RenderOneFrame()
     RenderSprite(FSpriteDesc());
     nvgEndFrame(vg);
 
+	if(Flags[(int)EFlag::ReloadShader])
+	{
+		Shader3D->Unload();
+		Shader3D->Load();
+        Flags[(int)EFlag::ReloadShader] = false;
+	}
     Shader3D->Bind();
 	glm::mat4 matModel = glm::rotate(glm::mat4(1.0f), RC.System->GetSystemClock()->GetGameTime(), glm::vec3(0.0f, 1.0f, 0.0f));
 	matModel = glm::scale(matModel, glm::vec3(2.0f));
     //glm::mat4 matView = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -1.0f + RC.System->GetSystemClock()->GetGameTime()));
-	glm::mat4 matView = glm::lookAt(glm::vec3(0, 5.0f, 15.0f), glm::vec3(), glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 matView = glm::lookAt(glm::vec3(0.0f, 0.0f, 20.0f), glm::vec3(), glm::vec3(0.0f, 1.0f, 0.0f));
     //float PixelsPerUnit = 100.0f;
     //glm::mat4 matProj = glm::ortho(-Width / 2.0f / PixelsPerUnit, Width / 2.0f / PixelsPerUnit,
     //                               -Height / 2.0f / PixelsPerUnit, Height / 2.0f / PixelsPerUnit);
@@ -98,12 +109,16 @@ void FRender::RenderOneFrame()
 	glDepthFunc(GL_LESS); //Initial
 	glEnable(GL_FRAMEBUFFER_SRGB);
     Mesh->Draw();
-	glDisable(GL_FRAMEBUFFER_SRGB);
 
-    //matModel = glm::translate(glm::mat4(), glm::vec3(-5.0f, 2.0f, 5.0f));
-    //matMVP = matProj * matView * matModel;
-	//Shader3D->Uniform(FShader::EUniformLocation::MVP, value_ptr(matMVP));
-    //Mesh->Draw();
+    matModel = glm::translate(matModel, glm::vec3(-10.0f, 0.0f, 0.0f));
+	matMV = matView * matModel;
+    matMVP = matProj * matView * matModel;
+	matNormal = glm::inverseTranspose(glm::mat3(matMV));
+	Shader3D->Uniform(FShader::EUniformLocation::MV, value_ptr(matMV));
+	Shader3D->Uniform(FShader::EUniformLocation::MVP, value_ptr(matMVP));
+	Shader3D->Uniform(FShader::EUniformLocation::Normal, value_ptr(matNormal));
+    MeshErr->Draw();
+	glDisable(GL_FRAMEBUFFER_SRGB);
 
     nvgBeginFrame(vg, Width, Height, 1.0f);
 	for(auto cmd : CommandQueue2D)

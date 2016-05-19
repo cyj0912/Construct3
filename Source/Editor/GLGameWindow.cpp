@@ -18,6 +18,7 @@ GLGameWindow::GLGameWindow()
 
 void GLGameWindow::initializeGL()
 {
+    c3::RC.Render = &Render;
     Render.Init();
     c3::RC.Engine->Test();
 }

@@ -1,9 +1,9 @@
 #pragma once
 #include <Core.h>
-#include <Command.h>
+#include <IRender.h>
 #include <vector>
 C3_NAMESPACE_BEGIN
-typedef void* (*GLLOADADDRESS)(const char *name);
+
 
 struct FSpriteDesc
 {
@@ -12,19 +12,6 @@ struct FSpriteDesc
 
 class FShader;
 class FRenderModel;
-
-class IRender
-{
-public:
-	virtual void Init() = 0;
-	virtual void Init(GLLOADADDRESS loader) = 0;
-	virtual void Shutdown() = 0;
-	virtual void PrepareGL() = 0;
-	virtual void RenderOneFrame() = 0;
-	virtual void RenderSprite(const FSpriteDesc& desc) = 0;
-	virtual void Resize(int w, int h) = 0;
-	virtual void DrawControl(float x, float y, float w, float h) = 0;
-};
 
 class FRender : public IRender
 {
@@ -41,9 +28,14 @@ public:
 	void RenderText(std::string text);
 	void Push2DCommand(ICommand* pCmd);
 	void RenderModel(FShader* shader, FRenderModel* mesh, float* transformMat4);
+	void SetFlag(EFlag flag, bool value) override
+	{
+        Flags[(int)flag] = true;
+	}
 
 private:
 	int Width, Height;
 	std::vector<ICommand*> CommandQueue2D;
+	bool Flags[(int)EFlag::NUMBEROFFLAGS];
 };
 C3_NAMESPACE_END

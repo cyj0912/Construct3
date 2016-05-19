@@ -2,6 +2,7 @@
 #include "ui_MainWindow.h"
 #include <GLGameWindow.h>
 #include <Core.h>
+#include <IRender.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -30,7 +31,7 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_actionReloadShader_triggered()
 {
-	this->close();
+    c3::RC.Render->SetFlag(c3::IRender::EFlag::ReloadShader, true);
 }
 
 void MainWindow::OnLogChanged()
