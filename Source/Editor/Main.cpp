@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     QApplication::setApplicationName("Editor");
     QApplication::setApplicationVersion("1.0");
-
+	app.setStyle("fusion");
 
     QCommandLineParser parser;
     parser.setApplicationDescription("The Editor");
@@ -48,8 +48,8 @@ int main(int argc, char *argv[])
     c3::RC.Loader = &EngineLoader;
     c3::RC.Loader->InitEngine();
 
-    c3::FEditor EditorControl;
-    c3::RC.Editor = &EditorControl;
+    c3::FEditor EditorController;
+    c3::RC.Editor = &EditorController;
 
     QSurfaceFormat format;
     format.setVersion(4, 5);
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     QSurfaceFormat::setDefaultFormat(format);
 
     MainWindow mainWindow;
-	c3::FLogDisplay* LogDisplay = static_cast<c3::FLogDisplay*>(EditorControl.GetLogDisplay());
+	c3::FLogDisplay* LogDisplay = static_cast<c3::FLogDisplay*>(EditorController.GetLogDisplay());
     QObject::connect(LogDisplay, &c3::FLogDisplay::LogRefreshed,
                      &mainWindow, &MainWindow::OnLogChanged);
 	mainWindow.showMaximized();

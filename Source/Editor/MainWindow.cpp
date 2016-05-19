@@ -1,7 +1,7 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include <GLGameWindow.h>
-#include <Log.h>
+#include <Core.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -26,6 +26,11 @@ MainWindow::~MainWindow()
 void MainWindow::on_actionExit_triggered()
 {
     this->close();
+}
+
+void MainWindow::on_actionReloadShader_triggered()
+{
+	this->close();
 }
 
 void MainWindow::OnLogChanged()
