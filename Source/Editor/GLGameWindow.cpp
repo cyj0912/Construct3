@@ -14,6 +14,14 @@ FCallablePtrCommand<std::function<void()>> Command;
 
 GLGameWindow::GLGameWindow()
 {
+	PaintTimer = new QTimer(this);
+	connect(PaintTimer, &QTimer::timeout, this, &GLGameWindow::triggerUpdate);
+	PaintTimer->start(15);
+}
+
+void GLGameWindow::triggerUpdate()
+{
+	this->update();
 }
 
 void GLGameWindow::initializeGL()
@@ -32,7 +40,7 @@ void GLGameWindow::paintGL()
 {
 	c3::RC.Engine->Update();
     Render.RenderOneFrame();
-    this->update();
+    //this->update();
 }
 
 void GLGameWindow::keyPressEvent(QKeyEvent *event)

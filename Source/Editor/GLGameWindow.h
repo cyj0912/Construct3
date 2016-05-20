@@ -1,10 +1,15 @@
 #pragma once
 #include <QOpenGLWindow>
+#include <QTimer>
 
 class GLGameWindow : public QOpenGLWindow
 {
+	QTimer* PaintTimer;
 public:
     GLGameWindow();
+
+public slots:
+	void triggerUpdate();
 
 protected:
     void initializeGL() override;
