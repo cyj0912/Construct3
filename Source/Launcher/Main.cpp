@@ -1,9 +1,7 @@
 #include <Core.h>
-#if C3_OS == C3_OS_WINDOWS_NT
-#include <SDL.h>
-#include <Windows.h>
-#else
 #include <SDL2/SDL.h>
+#if C3_OS == C3_OS_WINDOWS_NT
+#include <Windows.h>
 #endif
 #include <System.h>
 #include <Render.h>

@@ -29,6 +29,7 @@ struct NVGcontext* vg;
 int image;
 FRender::FRender() : bCloseUp(true)
 {
+	memset(Flags, 0, sizeof(Flags));
 }
 
 void FRender::Init()

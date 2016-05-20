@@ -5,7 +5,7 @@
 C3_NAMESPACE_BEGIN
 
 
-struct FSpriteDesc
+class FSpriteDesc
 {
 	
 };
