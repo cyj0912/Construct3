@@ -1,4 +1,5 @@
 /*build/
-/Source/Thirdparty/
+/Source/Thirdparty/*
+!/Source/Thirdparty/CMakeLists.txt
 /Data
 Source/.idea/
