@@ -1,0 +1,3 @@
+[submodule "DependencyMan"]
+	path = DependencyMan
+	url = https://github.com/cyj0912/DependencyMan.git
