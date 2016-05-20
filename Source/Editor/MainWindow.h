@@ -17,6 +17,7 @@ public:
 public slots:
     void on_actionExit_triggered();
 	void on_actionReloadShader_triggered();
+	void on_actionNearFar_triggered();
     void OnLogChanged();
 
 private:

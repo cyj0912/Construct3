@@ -10,6 +10,7 @@ public:
     enum class EFlag
     {
         ReloadShader,
+        SwitchNearFar,
         NUMBEROFFLAGS
     };
     virtual void Init() = 0;

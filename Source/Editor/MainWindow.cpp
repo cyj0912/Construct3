@@ -34,6 +34,11 @@ void MainWindow::on_actionReloadShader_triggered()
     c3::RC.Render->SetFlag(c3::IRender::EFlag::ReloadShader, true);
 }
 
+void MainWindow::on_actionNearFar_triggered()
+{
+    c3::RC.Render->SetFlag(c3::IRender::EFlag::SwitchNearFar, true);
+}
+
 void MainWindow::OnLogChanged()
 {
 	ui->logText->appendPlainText(c3::FLog::ReadBuffer().c_str());

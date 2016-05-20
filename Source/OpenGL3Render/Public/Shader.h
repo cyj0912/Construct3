@@ -9,7 +9,8 @@ public:
     {
 		MV,
         MVP,
-		Normal
+		Normal,
+		Glossy
     };
 	FShader();
 	void Load();

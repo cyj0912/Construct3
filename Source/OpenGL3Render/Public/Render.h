@@ -37,5 +37,6 @@ private:
 	int Width, Height;
 	std::vector<ICommand*> CommandQueue2D;
 	bool Flags[(int)EFlag::NUMBEROFFLAGS];
+	bool bCloseUp;
 };
 C3_NAMESPACE_END

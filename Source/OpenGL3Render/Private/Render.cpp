@@ -27,7 +27,7 @@ FRenderModel* Mesh;
 FRenderModel* MeshErr;
 struct NVGcontext* vg;
 int image;
-FRender::FRender()
+FRender::FRender() : bCloseUp(true)
 {
 }
 
@@ -88,21 +88,28 @@ void FRender::RenderOneFrame()
 		Shader3D->Load();
         Flags[(int)EFlag::ReloadShader] = false;
 	}
+    if(Flags[(int)EFlag::SwitchNearFar])
+    {
+        bCloseUp = !bCloseUp;
+        Flags[(int)EFlag::SwitchNearFar] = false;
+    }
     Shader3D->Bind();
 	glm::mat4 matModel = glm::rotate(glm::mat4(1.0f), RC.System->GetSystemClock()->GetGameTime(), glm::vec3(0.0f, 1.0f, 0.0f));
 	matModel = glm::scale(matModel, glm::vec3(2.0f));
     //glm::mat4 matView = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -1.0f + RC.System->GetSystemClock()->GetGameTime()));
-	glm::mat4 matView = glm::lookAt(glm::vec3(0.0f, 0.0f, 20.0f), glm::vec3(), glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 matView = glm::lookAt(glm::vec3(0.0f, 0.0f, bCloseUp ? 20.0f : 200.0f), glm::vec3(), glm::vec3(0.0f, 1.0f, 0.0f));
     //float PixelsPerUnit = 100.0f;
     //glm::mat4 matProj = glm::ortho(-Width / 2.0f / PixelsPerUnit, Width / 2.0f / PixelsPerUnit,
     //                               -Height / 2.0f / PixelsPerUnit, Height / 2.0f / PixelsPerUnit);
-	glm::mat4 matProj = glm::perspective(1.5f, (float)Width / (float)Height, 0.1f, 100.0f);
+	glm::mat4 matProj = glm::perspective(1.5f, (float)Width / (float)Height, 0.1f, 1000.0f);
     glm::mat4 matMV = matView * matModel;
     glm::mat4 matMVP = matProj * matMV;
 	glm::mat3 matNormal = glm::inverseTranspose(glm::mat3(matMV));
 	Shader3D->Uniform(FShader::EUniformLocation::MV, value_ptr(matMV));
 	Shader3D->Uniform(FShader::EUniformLocation::MVP, value_ptr(matMVP));
 	Shader3D->Uniform(FShader::EUniformLocation::Normal, value_ptr(matNormal));
+    float g = 25.0f;
+    Shader3D->Uniform(FShader::EUniformLocation::Glossy, &g);
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CCW); //Initial
 	glEnable(GL_DEPTH_TEST);
@@ -110,14 +117,25 @@ void FRender::RenderOneFrame()
 	glEnable(GL_FRAMEBUFFER_SRGB);
     Mesh->Draw();
 
-    matModel = glm::translate(matModel, glm::vec3(-10.0f, 0.0f, 0.0f));
-	matMV = matView * matModel;
-    matMVP = matProj * matView * matModel;
-	matNormal = glm::inverseTranspose(glm::mat3(matMV));
-	Shader3D->Uniform(FShader::EUniformLocation::MV, value_ptr(matMV));
-	Shader3D->Uniform(FShader::EUniformLocation::MVP, value_ptr(matMVP));
-	Shader3D->Uniform(FShader::EUniformLocation::Normal, value_ptr(matNormal));
-    MeshErr->Draw();
+    float glossiness = 1.0f;
+	for(float disp = -20.0f; disp <= 20.0f; disp += 10.0f)
+	{
+        if(disp == 0.0f)
+        {
+            glossiness *= 5.0f;
+            continue;
+        }
+        glm::mat4 newMatModel = glm::translate(glm::mat4(), glm::vec3(disp, 0.0f, 0.0f)) * matModel;
+		matMV = matView * newMatModel;
+		matMVP = matProj * matView * newMatModel;
+		matNormal = glm::inverseTranspose(glm::mat3(matMV));
+		Shader3D->Uniform(FShader::EUniformLocation::MV, value_ptr(matMV));
+		Shader3D->Uniform(FShader::EUniformLocation::MVP, value_ptr(matMVP));
+		Shader3D->Uniform(FShader::EUniformLocation::Normal, value_ptr(matNormal));
+        Shader3D->Uniform(FShader::EUniformLocation::Glossy, &glossiness);
+		Mesh->Draw();
+        glossiness *= 5.0f;
+	}
 	glDisable(GL_FRAMEBUFFER_SRGB);
 
     nvgBeginFrame(vg, Width, Height, 1.0f);

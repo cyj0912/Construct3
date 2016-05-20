@@ -106,6 +106,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionReloadShader"/>
+   <addaction name="actionNearFar"/>
   </widget>
   <action name="actionExit">
    <property name="text">
@@ -115,6 +116,11 @@
   <action name="actionReloadShader">
    <property name="text">
     <string>Reload Shader</string>
+   </property>
+  </action>
+  <action name="actionNearFar">
+   <property name="text">
+    <string>Near/Far</string>
    </property>
   </action>
  </widget>

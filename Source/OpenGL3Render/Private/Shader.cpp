@@ -75,7 +75,10 @@ void FShader::Uniform(EUniformLocation loc, void *data) const
 		uniformLoc = glGetUniformLocation(Program, "uMNormal");
 		glUniformMatrix3fv(uniformLoc, 1, GL_FALSE, (const GLfloat*)data);
 		break;
-    default: break;
+	case EUniformLocation::Glossy:
+		uniformLoc = glGetUniformLocation(Program, "glossiness");
+		glUniform1f(uniformLoc, *(float*)data);
+		break;
     }
 }
 C3_NAMESPACE_END
