@@ -157,7 +157,7 @@ void FRender::RenderOneFrame()
 	}
 	CommandQueue2D.clear();
     std::stringstream ss;
-    ss << "SysClk: " << RC.System->GetSystemClock()->GetTotalTime() << "s";
+    ss << "Time: " << RC.System->GetSystemClock()->GetTotalTime() << "s";
     nvgFillColor(vg, nvgRGB(0, 0, 0));
     nvgFontSize(vg, 36);
     nvgFontFace(vg, "normal");
