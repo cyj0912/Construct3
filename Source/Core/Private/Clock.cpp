@@ -145,7 +145,7 @@ bool FPerfTimer::IsPaused()
     return bPaused;
 }
 
-float FPerfTimer::GetGameTime() const
+float FPerfTimer::GetTotalTime() const
 {
     return static_cast<float>((double)CountDuringGame * sTimebaseInfo.numer / sTimebaseInfo.denom / 1000000000.0);
 }

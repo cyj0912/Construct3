@@ -95,9 +95,10 @@ void FRender::RenderOneFrame()
         Flags[(int)EFlag::SwitchNearFar] = false;
     }
     Shader3D->Bind();
-	glm::mat4 matModel = glm::rotate(glm::mat4(1.0f), RC.System->GetSystemClock()->GetGameTime(), glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 matModel = glm::rotate(glm::mat4(1.0f),
+									 RC.System->GetSystemClock()->GetTotalTime(), glm::vec3(0.0f, 1.0f, 0.0f));
 	matModel = glm::scale(matModel, glm::vec3(2.0f));
-    //glm::mat4 matView = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -1.0f + RC.System->GetSystemClock()->GetGameTime()));
+    //glm::mat4 matView = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -1.0f + RC.System->GetSystemClock()->GetTotalTime()));
 	glm::mat4 matView = glm::lookAt(glm::vec3(0.0f, 0.0f, bCloseUp ? 20.0f : 200.0f), glm::vec3(), glm::vec3(0.0f, 1.0f, 0.0f));
     //float PixelsPerUnit = 100.0f;
     //glm::mat4 matProj = glm::ortho(-Width / 2.0f / PixelsPerUnit, Width / 2.0f / PixelsPerUnit,
@@ -146,7 +147,7 @@ void FRender::RenderOneFrame()
 	}
 	CommandQueue2D.clear();
     std::stringstream ss;
-    ss << "SysClk: " << RC.System->GetSystemClock()->GetGameTime() << "s";
+    ss << "SysClk: " << RC.System->GetSystemClock()->GetTotalTime() << "s";
     nvgFillColor(vg, nvgRGB(0, 0, 0));
     nvgFontSize(vg, 36);
     nvgFontFace(vg, "normal");
