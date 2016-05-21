@@ -5,11 +5,9 @@
 
 C3_NAMESPACE_BEGIN
 class FGame {
-private:
+public:
 	FTimer<FPerfTimer> GameTimer;
 	std::vector<IEntity*> Entities;
-
-public:
 	FControls ActiveControls;
 
 	FGame() : GameTimer(*RC.System->GetSystemClock()) {

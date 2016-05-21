@@ -11,8 +11,18 @@ void FPlayer::Init() {
 }
 
 void FPlayer::Update() {
+	const float speed = 18;
 	if (Game.ActiveControls.MoveUp) {
-		SGEntry->Move(0, 1, 0);
+		SGEntry->Move(0, Game.GameTimer.GetDeltaTime() * speed, 0);
+	}
+	if (Game.ActiveControls.MoveDown) {
+		SGEntry->Move(0, Game.GameTimer.GetDeltaTime() * -speed, 0);
+	}
+	if (Game.ActiveControls.MoveLeft) {
+		SGEntry->Move(Game.GameTimer.GetDeltaTime() * -speed, 0, 0);
+	}
+	if (Game.ActiveControls.MoveRight) {
+		SGEntry->Move(Game.GameTimer.GetDeltaTime() * speed, 0, 0);
 	}
 }
 C3_NAMESPACE_END
