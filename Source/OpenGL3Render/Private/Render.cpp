@@ -28,7 +28,7 @@ FRenderModel* MeshErr;
 struct NVGcontext* vg;
 int image;
 FSceneGraph SG;
-SGCamera* mainCam;
+SGCamera* MainCam;
 FRender::FRender() : bCloseUp(true)
 {
 	memset(Flags, 0, sizeof(Flags));
@@ -75,8 +75,8 @@ void FRender::PrepareGL()
 	nvgCreateFont(vg, "normal", RFile::GetPhysicalPath("Roboto-Light.ttf").c_str());
 	image = nvgCreateImage(vg, RFile::GetPhysicalPath("loading.png").c_str(), 0);
 
-	mainCam = new SGCamera(1000, 1000);
-	SG.SetActiveCamera(mainCam);
+	MainCam = new SGCamera(1920, 1080);
+	SG.SetActiveCamera(MainCam);
 	SGObject* rootNode = new SGObject();
 	SG.SetRootNode(rootNode);
 	rootNode->Owner = &SG;
@@ -146,7 +146,7 @@ void FRender::RenderOneFrame()
 	//	Mesh->Draw();
  //       glossiness *= 5.0f;
 	//}
-	mainCam->Resize(Width, Height);
+	MainCam->Resize(Width, Height);
 	SG.Render();
 	glDisable(GL_FRAMEBUFFER_SRGB);
 
@@ -179,6 +179,8 @@ void FRender::Resize(int w, int h)
 {
 	Width = w;
 	Height = h;
+	if (GetMainCamera())
+		GetMainCamera()->Resize(Width, Height);
 }
 
 void FRender::DrawControl(float x, float y, float w, float h)
@@ -220,5 +222,10 @@ SGObject* FRender::NewSGObject()
 	o->Parent = SG.GetRootNode();
 	SG.GetRootNode()->Children.push_back(o);
 	return o;
+}
+
+SGCamera* FRender::GetMainCamera()
+{
+	return MainCam;
 }
 C3_NAMESPACE_END

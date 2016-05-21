@@ -27,6 +27,7 @@ public:
         Flags[(int)flag] = true;
 	}
 	SGObject* NewSGObject() override;
+	SGCamera* GetMainCamera() override;
 
 private:
 	int Width, Height;

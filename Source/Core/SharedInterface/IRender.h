@@ -4,6 +4,7 @@ C3_NAMESPACE_BEGIN
 typedef void* (*GLLOADADDRESS)(const char *name);
 
 class SGObject;
+class SGCamera;
 class IRender
 {
 public:
@@ -23,5 +24,6 @@ public:
     virtual void DrawControl(float x, float y, float w, float h) = 0;
     virtual void SetFlag(EFlag flag, bool value) = 0;
 	virtual SGObject* NewSGObject() = 0;
+	virtual SGCamera* GetMainCamera() = 0;
 };
 C3_NAMESPACE_END
