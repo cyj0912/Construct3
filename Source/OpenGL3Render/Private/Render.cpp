@@ -102,7 +102,7 @@ void FRender::RenderOneFrame()
     //float PixelsPerUnit = 100.0f;
     //glm::mat4 matProj = glm::ortho(-Width / 2.0f / PixelsPerUnit, Width / 2.0f / PixelsPerUnit,
     //                               -Height / 2.0f / PixelsPerUnit, Height / 2.0f / PixelsPerUnit);
-	glm::mat4 matProj = glm::perspective(1.5f, (float)Width / (float)Height, 0.1f, 1000.0f);
+	glm::mat4 matProj = glm::perspective(90.0f / 180.0f * 3.141592654f, (float)Width / (float)Height, 0.1f, 1000.0f);
     glm::mat4 matMV = matView * matModel;
     glm::mat4 matMVP = matProj * matMV;
 	glm::mat3 matNormal = glm::inverseTranspose(glm::mat3(matMV));

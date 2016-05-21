@@ -18,8 +18,28 @@ int main(int argc, char *argv[])
 #endif
 	RC.Construct();
 	RC.System->Init();
-	//RC.System->SetRootDirectory("E:/Dev/construct3");
-	RC.System->SetRootDirectory("/Volumes/E/Dev/construct3");
+#if C3_OS == C3_OS_WINDOWS_NT
+	HMODULE hModule = GetModuleHandleW(NULL);
+	WCHAR path[MAX_PATH];
+	char path_utf8[MAX_PATH];
+	GetModuleFileNameW(hModule, path, MAX_PATH);
+	size_t len;
+	wcstombs_s(&len, path_utf8, path, MAX_PATH);
+	len--;
+	for(int i = 0; i < 4; i++)
+	{
+		while (path_utf8[len] != '\\')
+		{
+			path_utf8[len] = 0;
+			len--;
+		}
+		path_utf8[len] = 0;
+		len--;
+	}
+	RC.System->SetRootDirectory(path_utf8);
+#else
+	RC.System->SetRootDirectory("/Volumes/XE/construct3");
+#endif
 	SDL_Init(SDL_INIT_VIDEO);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
