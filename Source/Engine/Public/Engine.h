@@ -9,8 +9,7 @@ public:
 	{}
 	~FEngine()
 	{}
-	void Update()
-	{}
+	void Update();
 	void Test() {
 
 	}
