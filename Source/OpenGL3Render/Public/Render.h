@@ -4,12 +4,6 @@
 #include <vector>
 C3_NAMESPACE_BEGIN
 
-
-class FSpriteDesc
-{
-	
-};
-
 class FShader;
 class FRenderModel;
 
@@ -22,7 +16,7 @@ public:
 	void Shutdown() override;
 	void PrepareGL() override;
     void RenderOneFrame() override;
-	void RenderSprite(const FSpriteDesc& desc) override;
+	void RenderSprite() override;
 	void Resize(int w, int h) override;
 	void DrawControl(float x, float y, float w, float h) override;
 	void RenderText(std::string text);
@@ -32,6 +26,7 @@ public:
 	{
         Flags[(int)flag] = true;
 	}
+	SGObject* NewSGObject() override;
 
 private:
 	int Width, Height;

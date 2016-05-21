@@ -10,8 +10,6 @@ public:
 	~FEngine()
 	{}
 	void Update();
-	void StartGame() {
-
-	}
+	void StartGame();
 };
 C3_NAMESPACE_END

@@ -4,6 +4,7 @@
 #include "Model.h"
 #include "Render.h"
 #include "Shader.h"
+#include "SceneGraph.h"
 
 //Standard Library and Thridparty
 #include <sstream>
@@ -26,6 +27,9 @@ FRenderModel* Mesh;
 FRenderModel* MeshErr;
 struct NVGcontext* vg;
 int image;
+FSceneGraph SG;
+SGCamera* mainCam;
+SGObject* obj;
 FRender::FRender() : bCloseUp(true)
 {
 	memset(Flags, 0, sizeof(Flags));
@@ -61,25 +65,35 @@ void FRender::PrepareGL()
 
 	FAutoRef<RMesh> rmesh = new RMesh("bunny.fbx");
 	rmesh->LoadMesh();
-	Mesh = new FRenderModel(rmesh);
-    Mesh->Prepare();
+	//Mesh = new FRenderModel(rmesh);
+	//Mesh->Prepare();
 
-	rmesh = new RMesh("error.obj");
-	rmesh->LoadMesh();
-	MeshErr = new FRenderModel(rmesh);
-	MeshErr->Prepare();
+	//rmesh = new RMesh("error.obj");
+	//rmesh->LoadMesh();
+	//MeshErr = new FRenderModel(rmesh);
+	//MeshErr->Prepare();
 
     vg = nvgCreateGL3(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
 
 	nvgCreateFont(vg, "normal", RFile::GetPhysicalPath("Roboto-Light.ttf").c_str());
 	image = nvgCreateImage(vg, RFile::GetPhysicalPath("loading.png").c_str(), 0);
+
+	mainCam = new SGCamera(1000, 1000);
+	SG.SetActiveCamera(mainCam);
+	SGObject* rootNode = new SGObject();
+	SG.SetRootNode(rootNode);
+	rootNode->Owner = &SG;
+	rootNode->Parent = nullptr;
+
+	obj = this->NewSGObject();
+	obj->LoadModelFromResource(rmesh);
 }
 
 void FRender::RenderOneFrame()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     nvgBeginFrame(vg, Width, Height, 1.0f);
-    RenderSprite(FSpriteDesc());
+    RenderSprite();
     nvgEndFrame(vg);
 
 	if(Flags[(int)EFlag::ReloadShader])
@@ -94,49 +108,53 @@ void FRender::RenderOneFrame()
         Flags[(int)EFlag::SwitchNearFar] = false;
     }
     Shader3D->Bind();
-	glm::mat4 matModel = glm::rotate(glm::mat4(1.0f),
-									 RC.System->GetSystemClock()->GetTotalTime(), glm::vec3(0.0f, 1.0f, 0.0f));
-	matModel = glm::scale(matModel, glm::vec3(2.0f));
-    //glm::mat4 matView = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -1.0f + RC.System->GetSystemClock()->GetTotalTime()));
-	glm::mat4 matView = glm::lookAt(glm::vec3(0.0f, 0.0f, bCloseUp ? 20.0f : 200.0f), glm::vec3(), glm::vec3(0.0f, 1.0f, 0.0f));
-    //float PixelsPerUnit = 100.0f;
-    //glm::mat4 matProj = glm::ortho(-Width / 2.0f / PixelsPerUnit, Width / 2.0f / PixelsPerUnit,
-    //                               -Height / 2.0f / PixelsPerUnit, Height / 2.0f / PixelsPerUnit);
-	glm::mat4 matProj = glm::perspective(90.0f / 180.0f * 3.141592654f, (float)Width / (float)Height, 0.1f, 1000.0f);
-    glm::mat4 matMV = matView * matModel;
-    glm::mat4 matMVP = matProj * matMV;
-	glm::mat3 matNormal = glm::inverseTranspose(glm::mat3(matMV));
-	Shader3D->Uniform(FShader::EUniformLocation::MV, value_ptr(matMV));
-	Shader3D->Uniform(FShader::EUniformLocation::MVP, value_ptr(matMVP));
-	Shader3D->Uniform(FShader::EUniformLocation::Normal, value_ptr(matNormal));
-    float g = 25.0f;
-    Shader3D->Uniform(FShader::EUniformLocation::Glossy, &g);
+	obj->Move(RC.System->GetSystemClock()->GetDeltaTime(), 0.0f, 0.0f);
+	//glm::mat4 matModel = glm::rotate(glm::mat4(1.0f),
+	//								 RC.System->GetSystemClock()->GetTotalTime(), glm::vec3(0.0f, 1.0f, 0.0f));
+	//matModel = glm::scale(matModel, glm::vec3(2.0f));
+ //   //glm::mat4 matView = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -1.0f + RC.System->GetSystemClock()->GetTotalTime()));
+	//glm::mat4 matView = glm::lookAt(glm::vec3(0.0f, 0.0f, bCloseUp ? 20.0f : 200.0f), glm::vec3(), glm::vec3(0.0f, 1.0f, 0.0f));
+ //   //float PixelsPerUnit = 100.0f;
+ //   //glm::mat4 matProj = glm::ortho(-Width / 2.0f / PixelsPerUnit, Width / 2.0f / PixelsPerUnit,
+ //   //                               -Height / 2.0f / PixelsPerUnit, Height / 2.0f / PixelsPerUnit);
+	//glm::mat4 matProj = glm::perspective(90.0f / 180.0f * 3.141592654f, (float)Width / (float)Height, 0.1f, 1000.0f);
+ //   glm::mat4 matMV = matView * matModel;
+ //   glm::mat4 matMVP = matProj * matMV;
+	//glm::mat3 matNormal = glm::inverseTranspose(glm::mat3(matMV));
+	//Shader3D->Uniform(FShader::EUniformLocation::MV, value_ptr(matMV));
+	//Shader3D->Uniform(FShader::EUniformLocation::MVP, value_ptr(matMVP));
+	//Shader3D->Uniform(FShader::EUniformLocation::Normal, value_ptr(matNormal));
+ //   float g = 25.0f;
+ //   Shader3D->Uniform(FShader::EUniformLocation::Glossy, &g);
+
+	glEnable(GL_FRAMEBUFFER_SRGB);
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CCW); //Initial
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS); //Initial
-	glEnable(GL_FRAMEBUFFER_SRGB);
-    Mesh->Draw();
+ //   Mesh->Draw();
 
-    float glossiness = 1.0f;
-	for(float disp = -20.0f; disp <= 20.0f; disp += 10.0f)
-	{
-        if(disp == 0.0f)
-        {
-            glossiness *= 5.0f;
-            continue;
-        }
-        glm::mat4 newMatModel = glm::translate(glm::mat4(), glm::vec3(disp, 0.0f, 0.0f)) * matModel;
-		matMV = matView * newMatModel;
-		matMVP = matProj * matView * newMatModel;
-		matNormal = glm::inverseTranspose(glm::mat3(matMV));
-		Shader3D->Uniform(FShader::EUniformLocation::MV, value_ptr(matMV));
-		Shader3D->Uniform(FShader::EUniformLocation::MVP, value_ptr(matMVP));
-		Shader3D->Uniform(FShader::EUniformLocation::Normal, value_ptr(matNormal));
-        Shader3D->Uniform(FShader::EUniformLocation::Glossy, &glossiness);
-		Mesh->Draw();
-        glossiness *= 5.0f;
-	}
+ //   float glossiness = 1.0f;
+	//for(float disp = -20.0f; disp <= 20.0f; disp += 10.0f)
+	//{
+ //       if(disp == 0.0f)
+ //       {
+ //           glossiness *= 5.0f;
+ //           continue;
+ //       }
+ //       glm::mat4 newMatModel = glm::translate(glm::mat4(), glm::vec3(disp, 0.0f, 0.0f)) * matModel;
+	//	matMV = matView * newMatModel;
+	//	matMVP = matProj * matView * newMatModel;
+	//	matNormal = glm::inverseTranspose(glm::mat3(matMV));
+	//	Shader3D->Uniform(FShader::EUniformLocation::MV, value_ptr(matMV));
+	//	Shader3D->Uniform(FShader::EUniformLocation::MVP, value_ptr(matMVP));
+	//	Shader3D->Uniform(FShader::EUniformLocation::Normal, value_ptr(matNormal));
+ //       Shader3D->Uniform(FShader::EUniformLocation::Glossy, &glossiness);
+	//	Mesh->Draw();
+ //       glossiness *= 5.0f;
+	//}
+	mainCam->Resize(Width, Height);
+	SG.Render();
 	glDisable(GL_FRAMEBUFFER_SRGB);
 
     nvgBeginFrame(vg, Width, Height, 1.0f);
@@ -154,7 +172,7 @@ void FRender::RenderOneFrame()
     nvgEndFrame(vg);
 }
 
-void FRender::RenderSprite(const FSpriteDesc& desc)
+void FRender::RenderSprite()
 {
 	NVGpaint bg = nvgImagePattern(vg, 0, 0, (float)Width, (float)Height, 0.0f, image, 1.0f);
 	nvgBeginPath(vg);
@@ -200,5 +218,14 @@ void FRender::RenderModel(FShader* shader, FRenderModel* mesh, float* transformM
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS); //Initial
     mesh->Draw();
+}
+
+SGObject* FRender::NewSGObject()
+{
+	SGObject* o = new SGObject;
+	o->Owner = &SG;
+	o->Parent = SG.GetRootNode();
+	SG.GetRootNode()->Children.push_back(o);
+	return o;
 }
 C3_NAMESPACE_END

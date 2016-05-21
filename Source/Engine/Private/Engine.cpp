@@ -5,4 +5,9 @@ void FEngine::Update()
 {
 	RC.System->GetSystemClock()->Tick();
 }
+
+void FEngine::StartGame()
+{
+	
+}
 C3_NAMESPACE_END
