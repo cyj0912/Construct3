@@ -16,10 +16,7 @@ protected:
     void resizeGL(int w, int h) override;
     void paintGL() override;
     void keyPressEvent(QKeyEvent *event) override;
-    void keyReleaseEvent(QKeyEvent *event) override
-    {
-        QWindow::keyReleaseEvent(event);
-    }
+	void keyReleaseEvent(QKeyEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override
     {
         QWindow::mousePressEvent(event);

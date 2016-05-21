@@ -3,6 +3,7 @@
 #include <GLGameWindow.h>
 #include <Core.h>
 #include <IRender.h>
+#include <Engine/Public/Game.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),

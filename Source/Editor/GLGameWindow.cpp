@@ -5,6 +5,7 @@
 #include <sstream>
 #include <string>
 #include <functional>
+#include <Game.h>
 
 using c3::FRender;
 using c3::FCallablePtrCommand;
@@ -45,12 +46,43 @@ void GLGameWindow::paintGL()
 
 void GLGameWindow::keyPressEvent(QKeyEvent *event)
 {
-    if(event->key() == Qt::Key_Space)
-    {
-        c3::RC.System->GetSystemClock()->SwitchPause();
-        event->accept();
-    }
-    QWindow::keyPressEvent(event);
+	switch (event->key()) {
+	case Qt::Key_Space:
+		c3::RC.System->GetSystemClock()->SwitchPause();
+		event->accept();
+	case Qt::Key_W:
+		c3::Game.ActiveControls.MoveUp = true;
+		break;
+	case Qt::Key_A:
+		c3::Game.ActiveControls.MoveLeft = true;
+		break;
+	case Qt::Key_S:
+		c3::Game.ActiveControls.MoveDown = true;
+		break;
+	case Qt::Key_D:
+		c3::Game.ActiveControls.MoveRight = true;
+		break;
+	}
+	QWindow::keyPressEvent(event);
+}
+
+void GLGameWindow::keyReleaseEvent(QKeyEvent *event)
+{
+	switch (event->key()) {
+	case Qt::Key_W:
+		c3::Game.ActiveControls.MoveUp = false;
+		break;
+	case Qt::Key_A:
+		c3::Game.ActiveControls.MoveLeft = false;
+		break;
+	case Qt::Key_S:
+		c3::Game.ActiveControls.MoveDown = false;
+		break;
+	case Qt::Key_D:
+		c3::Game.ActiveControls.MoveRight = false;
+		break;
+	}
+	QWindow::keyReleaseEvent(event);
 }
 
 void GLGameWindow::mouseMoveEvent(QMouseEvent *event)

@@ -1,13 +1,16 @@
 #pragma once
 #include <Core.h>
+#include <Controls.h>
+
 C3_NAMESPACE_BEGIN
 class FGame {
 private:
 	FTimer<FPerfTimer> GameTimer;
 
 public:
-	FGame() : GameTimer(*RC.System->GetSystemClock())
-	{
+	FControls ActiveControls;
+
+	FGame() : GameTimer(*RC.System->GetSystemClock()) {
 
 	}
 
@@ -19,5 +22,11 @@ public:
 		RC.System->GetSystemClock()->Tick();
 		GameTimer.Tick();
 	}
+
+	void Test() {
+
+	}
 };
+
+extern FGame Game;
 C3_NAMESPACE_END
