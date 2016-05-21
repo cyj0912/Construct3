@@ -16,6 +16,7 @@ public:
 
 	void NewGame() {
 		Entities.push_back(new FPlayer);
+		Entities.push_back(new FEnemy);
 		for (IEntity* Entity : Entities) {
 			Entity->Init();
 		}

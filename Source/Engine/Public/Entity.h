@@ -15,4 +15,10 @@ public:
 	void Update() override;
 	void Init() override;
 };
+
+class FEnemy : public IEntity {
+public:
+	void Update() override;
+	void Init() override;
+};
 C3_NAMESPACE_END

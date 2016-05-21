@@ -25,4 +25,16 @@ void FPlayer::Update() {
 		SGEntry->Move(Game.GameTimer.GetDeltaTime() * speed, 0, 0);
 	}
 }
+
+//Enemy
+void FEnemy::Init() {
+	SGEntry = RC.Render->NewSGObject();
+	SGEntry->LoadModelFromResource(RC.Engine->BunnyRMesh);
+	SGEntry->Move(20, 0, -20);	//Make it look smaller than the player
+}
+
+void FEnemy::Update() {
+	const float speed = 1;
+	SGEntry->Move(Game.GameTimer.GetDeltaTime() * -speed, 0, 0);
+}
 C3_NAMESPACE_END
