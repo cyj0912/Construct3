@@ -38,6 +38,16 @@ public:
 		MProjection = glm::perspective(90.0f / 180.0f * 3.141592654f, (float)w / (float)h, 0.1f, 1000.0f);
     }
 
+	glm::vec2 HalfVecGivenZ(float z)
+    {
+		glm::vec4 homo(0.0f, 0.0f, z - 10.0f, 1.0f);
+		homo = MProjection * homo;
+		glm::vec3 pos = glm::vec3(homo) / homo.w;
+		pos.x = pos.y = 1.0f;
+		glm::vec4 ret = glm::inverse(MProjection) * glm::vec4(pos, 1.0f);
+		return glm::vec2(ret.x / ret.w, ret.y / ret.w);
+    }
+
 	void Resize(int w, int h)
     {
 		Width = w;
