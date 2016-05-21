@@ -2,6 +2,8 @@
 #include "Shader.h"
 #include <glm/gtc/matrix_inverse.hpp>
 #include "Model.h"
+#include <Mesh.h>
+#include <algorithm>
 C3_NAMESPACE_BEGIN
 extern FShader* Shader3D;
 
@@ -15,6 +17,22 @@ void SGCamera::Uniform(const glm::mat4& model)
 	Shader3D->Uniform(FShader::EUniformLocation::Normal, value_ptr(matNormal));
 }
 
+const FBoundingRect& SGObject::GetBoundingRectXY()
+{
+	size_t c = Model->GetRMesh()->Vertices.size();
+	if (c % 3 != 0)
+		throw "WTF has happened";
+	for(size_t i = 0; i < c; i += 3)
+	{
+		glm::vec3 p(Model->GetRMesh()->Vertices[i], Model->GetRMesh()->Vertices[i + 1], Model->GetRMesh()->Vertices[i + 2]);
+		glm::vec4 hip = GetTransform() * glm::vec4(p, 1.0f);
+		p = glm::vec3(hip) / hip.w;
+		BRect.TopRight.x = max(BRect.TopRight.x, p.x);
+		BRect.TopRight.y = max(BRect.TopRight.y, p.y);
+		BRect.BtmLeft.x = min(BRect.BtmLeft.x, p.x);
+		BRect.BtmLeft.y = min(BRect.BtmLeft.y, p.y);
+	}
+}
 
 void SGObject::Render()
 {

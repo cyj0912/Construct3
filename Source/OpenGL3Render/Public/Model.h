@@ -11,6 +11,7 @@ public:
     ~FRenderModel();
     void Prepare();
     void Draw() const;
+	const FAutoRef<RMesh>& GetRMesh();
 private:
     FAutoRef<RMesh> ResourceRef;
 	GLuint LocalVAO, LocalVertices, LocalUVs, LocalIndices, LocalNormals;

@@ -140,6 +140,7 @@ class SGObject : public SGNode
 	glm::vec3 Scale;
 	glm::quat Rotation;
 	glm::vec3 Position;
+	FBoundingRect BRect;
 public:
 	SGObject()
 	{
@@ -205,6 +206,8 @@ public:
 	{
 		GetTransform();
 	}
+
+	const FBoundingRect& GetBoundingRectXY();
 
 	void Render() override;
 	void LoadModelFromResource(const FAutoRef<RMesh>& rmesh);

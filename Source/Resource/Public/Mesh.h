@@ -20,7 +20,7 @@ public:
     void LoadMesh();
 	const FAABB& GetAABB();
 
-private:
+public:
     std::vector<float> Vertices;
     std::vector<unsigned short> Indices;
     std::vector<float> UVs;

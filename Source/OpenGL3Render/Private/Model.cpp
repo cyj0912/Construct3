@@ -93,4 +93,9 @@ void FRenderModel::Draw() const
 	else
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, (void*)0);
 }
+
+const FAutoRef<RMesh>& FRenderModel::GetRMesh()
+{
+	return ResourceRef;
+}
 C3_NAMESPACE_END
