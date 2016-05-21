@@ -25,18 +25,18 @@ int main(int argc, char *argv[])
 	GetModuleFileNameW(hModule, path, MAX_PATH);
 	size_t len;
 	wcstombs_s(&len, path_utf8, path, MAX_PATH);
-	len--;
-	for(int i = 0; i < 4; i++)
+	std::string reconPath;
+	std::string p(path_utf8);
+	std::stringstream ss(p);
+	std::string item;
+	while(getline(ss, item, '\\'))
 	{
-		while (path_utf8[len] != '\\')
-		{
-			path_utf8[len] = 0;
-			len--;
-		}
-		path_utf8[len] = 0;
-		len--;
+		reconPath += item;
+		reconPath += '\\';
+		struct stat buffer;
+		if (stat((reconPath + "Data").c_str(), &buffer) == 0) break;
 	}
-	RC.System->SetRootDirectory(path_utf8);
+	RC.System->SetRootDirectory(reconPath.c_str());
 #else
 	RC.System->SetRootDirectory("/Volumes/XE/construct3");
 #endif
