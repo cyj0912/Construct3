@@ -9,13 +9,14 @@ public:
 	FTimer<FPerfTimer> GameTimer;
 	std::vector<IEntity*> Entities;
 	FControls ActiveControls;
+	FPlayer Player;
 
 	FGame() : GameTimer(*RC.System->GetSystemClock()) {
 
 	}
 
 	void NewGame() {
-		Entities.push_back(new FPlayer);
+		Entities.push_back(&Player);
 		Entities.push_back(new FEnemy);
 		for (IEntity* Entity : Entities) {
 			Entity->Init();
@@ -24,6 +25,9 @@ public:
 	}
 	
 	void EndGame() {
+		for (IEntity* Entity : Entities) {
+			Entity->Destroy();
+		}
 		Entities.clear();
 	}
 

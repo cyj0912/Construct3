@@ -10,6 +10,10 @@ void FPlayer::Init() {
 	SGEntry->LoadModelFromResource(RC.Engine->BunnyRMesh);
 }
 
+void FPlayer::Destroy() {
+	SGEntry->DeleteModel();
+}
+
 void FPlayer::Update() {
 	const float speed = 18;
 	if (Game.ActiveControls.MoveUp) {
@@ -31,6 +35,10 @@ void FEnemy::Init() {
 	SGEntry = RC.Render->NewSGObject();
 	SGEntry->LoadModelFromResource(RC.Engine->BunnyRMesh);
 	SGEntry->Move(20, 0, -20);	//Make it look smaller than the player
+}
+
+void FEnemy::Destroy() {
+	SGEntry->DeleteModel();
 }
 
 void FEnemy::Update() {
