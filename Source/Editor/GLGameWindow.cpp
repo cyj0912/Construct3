@@ -27,11 +27,11 @@ void GLGameWindow::triggerUpdate()
 
 void GLGameWindow::initializeGL()
 {
-    c3::RC.Render = &Render;
+	c3::RC.System->GetSystemClock()->Init();
+	new(&c3::Game) c3::FGame();	//Hacky fix to get around C++ constructor call ordering
+	c3::RC.Render = &Render;
     Render.Init();
     c3::RC.Engine->Init();
-	c3::RC.System->GetSystemClock()->Init();
-	new(&c3::Game) c3::FGame();
 }
 
 void GLGameWindow::resizeGL(int w, int h)
