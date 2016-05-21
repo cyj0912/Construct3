@@ -7,3 +7,4 @@
 3. Setup `Data` folder
 4. Point `ENGINE_ROOT` environment variable to the folder contains `Data`
 5. `cmake Source`
+![alt text](/Screenshot.png "MainWindow")
