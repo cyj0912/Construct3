@@ -3,9 +3,12 @@
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <algorithm>
 C3_NAMESPACE_BEGIN
 RMesh::RMesh()
 {
+	AABB.High = glm::vec3(0.0f);
+	AABB.Low = glm::vec3(0.0f);
 }
 
 RMesh::RMesh(RResource *file)
@@ -27,6 +30,12 @@ RMesh::RMesh(const std::string &identifier)
         Vertices.push_back(mesh->mVertices[i].x);
         Vertices.push_back(mesh->mVertices[i].y);
         Vertices.push_back(mesh->mVertices[i].z);
+		AABB.High.x = std::max(AABB.High.x, mesh->mVertices[i].x);
+		AABB.Low.x = std::min(AABB.Low.x, mesh->mVertices[i].x);
+		AABB.High.y = std::max(AABB.High.y, mesh->mVertices[i].y);
+		AABB.Low.y = std::min(AABB.Low.y, mesh->mVertices[i].y);
+		AABB.High.z = std::max(AABB.High.z, mesh->mVertices[i].z);
+		AABB.Low.z = std::min(AABB.Low.z, mesh->mVertices[i].z);
 		if(mesh->HasNormals())
 		{
 			Normals.push_back(mesh->mNormals[i].x);
@@ -61,6 +70,11 @@ void RMesh::LoadMesh()
 {
 	if (Parent)
 		return;
+}
+
+const FAABB& RMesh::GetAABB()
+{
+	return AABB;
 }
 
 C3_NAMESPACE_END
