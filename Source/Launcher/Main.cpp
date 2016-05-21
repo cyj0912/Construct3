@@ -27,9 +27,9 @@ int main(int argc, char *argv[])
 	wcstombs_s(&len, path_utf8, path, MAX_PATH);
 	std::string reconPath;
 	std::string p(path_utf8);
-	std::stringstream ss(p);
+	std::stringstream sss(p);
 	std::string item;
-	while(getline(ss, item, '\\'))
+	while(getline(sss, item, '\\'))
 	{
 		reconPath += item;
 		reconPath += '\\';

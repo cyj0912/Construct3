@@ -126,6 +126,11 @@ public:
 	}
 };
 
+struct FBoundingRect
+{
+	glm::vec2 BtmLeft, TopRight;
+};
+
 //Lazy
 class SGObject : public SGNode
 {
