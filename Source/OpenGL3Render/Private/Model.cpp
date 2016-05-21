@@ -6,7 +6,7 @@ FRenderModel::FRenderModel()
 {
 }
 
-FRenderModel::FRenderModel(const FAutoRefPtr<RMesh> &mesh)
+FRenderModel::FRenderModel(const FAutoRef<RMesh> &mesh)
 {
     ResourceRef = mesh;
 }

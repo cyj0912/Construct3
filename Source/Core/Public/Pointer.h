@@ -20,35 +20,35 @@ public:
  *   1. Constructors automatically increments refcount, you must bind rvalue pointers to a lvalue.
  *   2. lvalue pointers take ownership, Release() it before going out of scope.
  *
- *   FAutoRefPtr steals ownership from rvalue pointers, shares ownership with lvalue pointers
+ *   FAutoRef steals ownership from rvalue pointers, shares ownership with lvalue pointers
  */
 
 template <typename T>
-class FAutoRefPtr
+class FAutoRef
 {
     T* Pointer;
 public:
     //Default constructor
-    FAutoRefPtr() : Pointer(nullptr) {}
+    FAutoRef() : Pointer(nullptr) {}
 
-    FAutoRefPtr(const FAutoRefPtr& from)
+    FAutoRef(const FAutoRef& from)
     {
         Pointer = from.Pointer;
         Pointer->AddRef();
     }
-    FAutoRefPtr(FAutoRefPtr&& from)
+    FAutoRef(FAutoRef&& from)
     {
         Pointer = from.Pointer;
         from.Pointer = nullptr;
     }
-    FAutoRefPtr & operator=(const FAutoRefPtr& from)
+    FAutoRef & operator=(const FAutoRef& from)
     {
         Clear();
         Pointer = from.Pointer;
         Pointer->AddRef();
         return *this;
     }
-    FAutoRefPtr & operator=(FAutoRefPtr&& from)
+    FAutoRef & operator=(FAutoRef&& from)
     {
         Clear();
         Pointer = from.Pointer;
@@ -56,26 +56,26 @@ public:
         return *this;
     }
 
-    FAutoRefPtr(T* & from) : Pointer(from)
+    FAutoRef(T* & from) : Pointer(from)
     {
         Pointer->AddRef();
     }
-    FAutoRefPtr(T* && from) : Pointer(from) {}
-    FAutoRefPtr & operator=(T* & from)
+    FAutoRef(T* && from) : Pointer(from) {}
+    FAutoRef & operator=(T* & from)
     {
         Clear();
         Pointer = from;
         Pointer->AddRef();
         return *this;
     }
-    FAutoRefPtr & operator=(T* && from)
+    FAutoRef & operator=(T* && from)
     {
         Clear();
         Pointer = from;
         return *this;
     }
 
-    ~FAutoRefPtr()
+    ~FAutoRef()
     {
         Clear();
     }

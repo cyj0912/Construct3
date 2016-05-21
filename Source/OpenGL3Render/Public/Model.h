@@ -7,12 +7,12 @@ class FRenderModel
 {
 public:
     FRenderModel();
-    explicit FRenderModel(const FAutoRefPtr<RMesh> & mesh);
+    explicit FRenderModel(const FAutoRef<RMesh> & mesh);
     ~FRenderModel();
     void Prepare();
     void Draw() const;
 private:
-    FAutoRefPtr<RMesh> ResourceRef;
+    FAutoRef<RMesh> ResourceRef;
 	GLuint LocalVAO, LocalVertices, LocalUVs, LocalIndices, LocalNormals;
 };
 C3_NAMESPACE_END

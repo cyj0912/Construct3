@@ -60,7 +60,7 @@ void FRender::PrepareGL()
 	Shader3D = new FShader;
 	Shader3D->Load();
 
-	FAutoRefPtr<RMesh> rmesh = new RMesh("bunny.fbx");
+	FAutoRef<RMesh> rmesh = new RMesh("bunny.fbx");
 	rmesh->LoadMesh();
 	Mesh = new FRenderModel(rmesh);
     Mesh->Prepare();
