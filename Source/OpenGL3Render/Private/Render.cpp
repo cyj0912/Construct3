@@ -63,8 +63,6 @@ void FRender::PrepareGL()
 	Shader3D = new FShader;
 	Shader3D->Load();
 
-	FAutoRef<RMesh> rmesh = new RMesh("bunny.fbx");
-	rmesh->LoadMesh();
 	//Mesh = new FRenderModel(rmesh);
 	//Mesh->Prepare();
 
@@ -85,6 +83,9 @@ void FRender::PrepareGL()
 	rootNode->Owner = &SG;
 	rootNode->Parent = nullptr;
 
+	//Sample code rendering
+	FAutoRef<RMesh> rmesh = new RMesh("bunny.fbx");
+	rmesh->LoadMesh();
 	obj = this->NewSGObject();
 	obj->LoadModelFromResource(rmesh);
 }
