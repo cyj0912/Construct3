@@ -52,15 +52,19 @@ void GLGameWindow::keyPressEvent(QKeyEvent *event)
 		event->accept();
 	case Qt::Key_W:
 		c3::Game.ActiveControls.MoveUp = true;
+		c3::Game.ActiveControls.MoveDown = false;	//Neutralize opposite control
 		break;
 	case Qt::Key_A:
 		c3::Game.ActiveControls.MoveLeft = true;
+		c3::Game.ActiveControls.MoveRight = false;	//Neutralize opposite control
 		break;
 	case Qt::Key_S:
 		c3::Game.ActiveControls.MoveDown = true;
+		c3::Game.ActiveControls.MoveUp = false;	//Neutralize opposite control
 		break;
 	case Qt::Key_D:
 		c3::Game.ActiveControls.MoveRight = true;
+		c3::Game.ActiveControls.MoveLeft = false;	//Neutralize opposite control
 		break;
 	}
 	QWindow::keyPressEvent(event);
