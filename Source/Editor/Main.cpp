@@ -7,13 +7,17 @@
 #include "MainWindow.h"
 #include "EngineLoader.h"
 #include "Editor.h"
+#include <Core.h>
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     QApplication::setApplicationName("Editor");
     QApplication::setApplicationVersion("1.0");
+#if C3_OS == C3_OS_WINDOWS_NT
+	//Windows native theme looks so ugly
 	app.setStyle("fusion");
+#endif
 
     QCommandLineParser parser;
     parser.setApplicationDescription("The Editor");
