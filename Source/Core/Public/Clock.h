@@ -10,7 +10,7 @@ public:
 	void Init();
 	void Tick();
 	void SwitchPause();
-	bool IsPaused();
+	bool IsPaused() const;
 	float GetTotalTime() const;
     float GetDeltaTime() const;
 

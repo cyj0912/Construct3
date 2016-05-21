@@ -62,12 +62,12 @@ void FPerfTimer::SwitchPause()
 	}
 }
 
-bool FPerfTimer::IsPaused()
+bool FPerfTimer::IsPaused() const
 {
 	return bPaused;
 }
 
-float FPerfTimer::GetGameTime() const
+float FPerfTimer::GetTotalTime() const
 {
 	return static_cast<float>(CountDuringGame * SecondsPerCount);
 }
@@ -140,7 +140,7 @@ void FPerfTimer::SwitchPause()
         bPaused = true;
     }
 }
-bool FPerfTimer::IsPaused()
+bool FPerfTimer::IsPaused() const
 {
     return bPaused;
 }
