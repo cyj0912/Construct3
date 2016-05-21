@@ -29,7 +29,9 @@ void GLGameWindow::initializeGL()
 {
     c3::RC.Render = &Render;
     Render.Init();
-    c3::RC.Engine->StartGame();
+    c3::RC.Engine->Init();
+	c3::RC.System->GetSystemClock()->Init();
+	new(&c3::Game) c3::FGame();
 }
 
 void GLGameWindow::resizeGL(int w, int h)
@@ -40,6 +42,7 @@ void GLGameWindow::resizeGL(int w, int h)
 void GLGameWindow::paintGL()
 {
 	c3::RC.Engine->Update();
+	c3::Game.Update();
     Render.RenderOneFrame();
     //this->update();
 }

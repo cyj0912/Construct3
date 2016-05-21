@@ -1,11 +1,13 @@
 #pragma once
 #include <Core.h>
 #include <Controls.h>
+#include <Entity.h>
 
 C3_NAMESPACE_BEGIN
 class FGame {
 private:
 	FTimer<FPerfTimer> GameTimer;
+	std::vector<IEntity*> Entities;
 
 public:
 	FControls ActiveControls;
@@ -14,13 +16,24 @@ public:
 
 	}
 
-	void Init() {
-
+	void NewGame() {
+		Entities.push_back(new FPlayer);
+		for (IEntity* Entity : Entities) {
+			Entity->Init();
+		}
+		GameTimer.Init();
+	}
+	
+	void EndGame() {
+		Entities.clear();
 	}
 
 	void Update() {
 		RC.System->GetSystemClock()->Tick();
 		GameTimer.Tick();
+		for (IEntity* Entity : Entities) {
+			Entity->Update();
+		}
 	}
 
 	void Test() {

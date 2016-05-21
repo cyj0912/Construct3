@@ -29,7 +29,6 @@ struct NVGcontext* vg;
 int image;
 FSceneGraph SG;
 SGCamera* mainCam;
-SGObject* obj;
 FRender::FRender() : bCloseUp(true)
 {
 	memset(Flags, 0, sizeof(Flags));
@@ -82,12 +81,6 @@ void FRender::PrepareGL()
 	SG.SetRootNode(rootNode);
 	rootNode->Owner = &SG;
 	rootNode->Parent = nullptr;
-
-	//Sample code rendering
-	FAutoRef<RMesh> rmesh = new RMesh("bunny.fbx");
-	rmesh->LoadMesh();
-	obj = this->NewSGObject();
-	obj->LoadModelFromResource(rmesh);
 }
 
 void FRender::RenderOneFrame()
@@ -109,7 +102,6 @@ void FRender::RenderOneFrame()
         Flags[(int)EFlag::SwitchNearFar] = false;
     }
     Shader3D->Bind();
-	obj->Move(RC.System->GetSystemClock()->GetDeltaTime(), 0.0f, 0.0f);
 	//glm::mat4 matModel = glm::rotate(glm::mat4(1.0f),
 	//								 RC.System->GetSystemClock()->GetTotalTime(), glm::vec3(0.0f, 1.0f, 0.0f));
 	//matModel = glm::scale(matModel, glm::vec3(2.0f));

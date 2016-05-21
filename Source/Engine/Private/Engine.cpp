@@ -1,13 +1,15 @@
 #include <Core.h>
 #include "Engine.h"
+#include "Game.h"
 C3_NAMESPACE_BEGIN
 void FEngine::Update()
 {
 	RC.System->GetSystemClock()->Tick();
 }
 
-void FEngine::StartGame()
-{
-	
+void FEngine::Init() {
+	BunnyRMesh = new RMesh("bunny.fbx");
+	BunnyRMesh->LoadMesh();
+	Game.NewGame();
 }
 C3_NAMESPACE_END

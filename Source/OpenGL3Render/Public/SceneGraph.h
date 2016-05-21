@@ -8,12 +8,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "Model.h"
 
 C3_NAMESPACE_BEGIN
 class FSceneGraph;
 class FRenderModel;
 class FShader;
+class RMesh;
 
 class SGNode
 {
@@ -201,27 +201,9 @@ public:
 		GetTransform();
 	}
 
-	void Render() override
-	{
-		if (!Model)
-			return;
-		if(!bModelReady)
-		{
-			Model->Prepare();
-			bModelReady = true;
-		}
-		Owner->GetActiveCamera()->Uniform(GetTransform());
-		Model->Draw();
-	}
+	void Render() override;
+	void LoadModelFromResource(const FAutoRef<RMesh>& rmesh);
 
-	void LoadModelFromResource(const FAutoRef<RMesh>& rmesh)
-	{
-		Model = new FRenderModel(rmesh);
-	}
-
-	void DeleteModel()
-	{
-		delete Model;
-	}
+	void DeleteModel();
 };
 C3_NAMESPACE_END

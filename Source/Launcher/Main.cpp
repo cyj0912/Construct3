@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 	render.Init();
 	render.Resize(1280, 720);
 	RC.Engine = new FEngine;
-    RC.Engine->StartGame();
+    RC.Engine->Init();
 	std::string mousePosStr;
 	for (SDL_PollEvent(&e); e.type != SDL_QUIT; SDL_PollEvent(&e))
 	{
