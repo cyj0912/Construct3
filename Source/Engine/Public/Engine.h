@@ -10,7 +10,7 @@ public:
 	~FEngine()
 	{}
 	void Update();
-	void Test() {
+	void StartGame() {
 
 	}
 };

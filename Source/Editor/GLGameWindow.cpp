@@ -28,7 +28,7 @@ void GLGameWindow::initializeGL()
 {
     c3::RC.Render = &Render;
     Render.Init();
-    c3::RC.Engine->Test();
+    c3::RC.Engine->StartGame();
 }
 
 void GLGameWindow::resizeGL(int w, int h)
