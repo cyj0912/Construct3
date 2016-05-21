@@ -4,7 +4,6 @@
 #include "Model.h"
 #include "Render.h"
 #include "Shader.h"
-#include "SceneGraph.h"
 
 //Standard Library and Thridparty
 #include <sstream>
