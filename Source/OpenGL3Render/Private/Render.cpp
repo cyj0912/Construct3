@@ -88,7 +88,7 @@ void FRender::RenderOneFrame()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     nvgBeginFrame(vg, Width, Height, 1.0f);
     RenderSprite();
-	Hud.Render();
+	Hud.Render(Width, Height);
     nvgEndFrame(vg);
 
 	if(Flags[(int)EFlag::ReloadShader])

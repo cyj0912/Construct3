@@ -154,8 +154,9 @@ class SGObject : public SGNode
 	glm::quat Rotation;
 	glm::vec3 Position;
 	FBoundingRect BRect;
+	bool bVisible;
 public:
-	SGObject()
+	SGObject() : bVisible(true)
 	{
 		Reset();
 	}
@@ -228,5 +229,9 @@ public:
 	void LoadModelFromResource(const FAutoRef<RMesh>& rmesh);
 
 	void DeleteModel();
+	void SetVisible(bool b)
+	{
+		bVisible = b;
+	}
 };
 C3_NAMESPACE_END

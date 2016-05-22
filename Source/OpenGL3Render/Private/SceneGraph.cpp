@@ -48,6 +48,8 @@ const FBoundingRect& SGObject::GetBoundingRectXY()
 
 void SGObject::Render()
 {
+	if(!bVisible)
+		return;
 	if (!Model)
 		return;
 	if (!bModelReady)
