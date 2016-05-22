@@ -19,6 +19,7 @@ const FBoundingRect& IEntity::GetBoundingRect()
 void FPlayer::Init() {
 	SGEntry = RC.Render->NewSGObject();
 	SGEntry->LoadModelFromResource(RC.Engine->BunnyRMesh);
+	Health = 100;
 }
 
 void FPlayer::Destroy() {
@@ -26,8 +27,12 @@ void FPlayer::Destroy() {
 }
 
 void FPlayer::Update() {
+	if (Health <= 0) {
+		Game.EndGame();
+		return;
+	}
 	const float Speed = 18;
-	const float SpeedUpOverTime = 0.05;
+	const float SpeedUpOverTime = 0.03;
 	const float Movement =
 		Game.GameTimer.GetDeltaTime() * Speed
 		+ SpeedUpOverTime * Game.GameTimer.GetTotalTime();
@@ -77,11 +82,16 @@ void FEnemy::Destroy() {
 
 void FEnemy::Update() {
 	const float Speed = 3;
-	const float SpeedUpOverTime = 0.05;
+	const float SpeedUpOverTime = 0.03;
 	const float Movement =
 		Game.GameTimer.GetDeltaTime() * Speed
 		+ SpeedUpOverTime * Game.GameTimer.GetTotalTime();
 	SGEntry->Move(0, 0, Movement);
+	if (SGEntry->GetPosition().z >= 0) {
+		Game.KillActiveEntity();
+		Game.Player.Health -= 10;
+	}
 	SGEntry->SetRotation(glm::quat(glm::vec3(Game.GameTimer.GetTotalTime(), 0.0f, 1.0f)));
+
 }
 C3_NAMESPACE_END

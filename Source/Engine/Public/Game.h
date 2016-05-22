@@ -19,6 +19,8 @@ public:
 	glm::vec2 ScreenSize;
 	float LastEnemySpawnTime;
 	uint32_t FrameCount;
+	uint64_t ActiveEntity;
+	bool InGame;
 
 	FGame() : GameTimer(*RC.System->GetSystemClock()), FrameCount(0) {
 
@@ -29,6 +31,8 @@ public:
 	void EndGame();
 
 	void Update();
+
+	void KillActiveEntity();
 };
 
 extern FGame Game;

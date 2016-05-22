@@ -73,6 +73,13 @@ void GLGameWindow::keyPressEvent(QKeyEvent *event)
 		c3::Game.ActiveControls.MoveRight = true;
 		c3::Game.ActiveControls.MoveLeft = false;	//Neutralize opposite control
 		break;
+	//NewGame key
+	case Qt::Key_F2:
+		if (c3::Game.InGame) {
+			c3::Game.EndGame();
+		}
+		c3::Game.NewGame();
+		break;
 	}
 	QWindow::keyPressEvent(event);
 }

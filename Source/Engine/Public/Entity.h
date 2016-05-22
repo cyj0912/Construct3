@@ -17,6 +17,8 @@ public:
 
 class FPlayer : public IEntity {
 public:
+	uint32_t Health;
+
 	void Update() override;
 	void Init() override;
 	void Destroy() override;
