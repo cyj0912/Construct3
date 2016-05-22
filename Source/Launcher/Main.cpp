@@ -20,24 +20,34 @@ int main(int argc, char *argv[])
 	RC.Construct();
 	RC.System->Init();
 #if C3_OS == C3_OS_WINDOWS_NT
-	HMODULE hModule = GetModuleHandleW(NULL);
-	WCHAR path[MAX_PATH];
+	WCHAR dst[MAX_PATH];
+	ExpandEnvironmentStringsW(L"%ENGINE_ROOT%", dst, MAX_PATH);
 	char path_utf8[MAX_PATH];
-	GetModuleFileNameW(hModule, path, MAX_PATH);
 	size_t len;
-	wcstombs_s(&len, path_utf8, path, MAX_PATH);
-	std::string reconPath;
-	std::string p(path_utf8);
-	std::stringstream sss(p);
-	std::string item;
-	while(getline(sss, item, '\\'))
+	wcstombs_s(&len, path_utf8, dst, MAX_PATH);
+	struct stat bufferr;
+	if (stat((std::string(path_utf8) + "\\Data").c_str(), &bufferr) != 0)
 	{
-		reconPath += item;
-		reconPath += '\\';
-		struct stat buffer;
-		if (stat((reconPath + "Data").c_str(), &buffer) == 0) break;
+
+		HMODULE hModule = GetModuleHandleW(NULL);
+		WCHAR path[MAX_PATH];
+		GetModuleFileNameW(hModule, path, MAX_PATH);
+		wcstombs_s(&len, path_utf8, path, MAX_PATH);
+		std::string reconPath;
+		std::string p(path_utf8);
+		std::stringstream sss(p);
+		std::string item;
+		while (getline(sss, item, '\\'))
+		{
+			reconPath += item;
+			reconPath += '\\';
+			struct stat buffer;
+			if (stat((reconPath + "Data").c_str(), &buffer) == 0) break;
+			RC.System->SetRootDirectory(reconPath.c_str());
+		}
 	}
-	RC.System->SetRootDirectory(reconPath.c_str());
+	else
+		RC.System->SetRootDirectory(path_utf8);
 #else
 	RC.System->SetRootDirectory("/Volumes/XE/construct3");
 #endif
