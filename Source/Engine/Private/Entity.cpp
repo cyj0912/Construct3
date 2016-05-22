@@ -65,7 +65,7 @@ void FPlayer::Update() {
 //Enemy
 void FEnemy::Init() {
 	SGEntry = RC.Render->NewSGObject();
-	SGEntry->LoadModelFromResource(RC.Engine->BunnyRMesh);
+	SGEntry->LoadModelFromResource(RC.Engine->EnemyMesh1);
 	float XMove = sfmt_genrand_real1(&Game.RandGen) * Game.ScreenSize.x * 2 - Game.ScreenSize.x;
 	float YMove = sfmt_genrand_real1(&Game.RandGen) * Game.ScreenSize.y * 2 - Game.ScreenSize.y;
 	SGEntry->Move(XMove, YMove, -20);

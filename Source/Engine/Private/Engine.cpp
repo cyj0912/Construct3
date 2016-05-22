@@ -10,5 +10,7 @@ void FEngine::Update()
 void FEngine::Init() {
 	BunnyRMesh = new RMesh("bunny.fbx");
 	BunnyRMesh->LoadMesh();
+	EnemyMesh1 = new RMesh("enemy1.fbx");
+	EnemyMesh1->LoadMesh();
 }
 C3_NAMESPACE_END
