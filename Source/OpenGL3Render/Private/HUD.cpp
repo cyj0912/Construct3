@@ -42,6 +42,7 @@ void FHUD::Render(int w, int h)
 	}
 	else
 	{
+		ttttt->SetVisible(false);
 		nvgFillColor(vg, nvgRGB(0, 0, 0));
 		nvgFontSize(vg, 36);
 		nvgFontFace(vg, "normal");
