@@ -48,13 +48,13 @@ void FHUD::Render(int w, int h)
 		nvgText(vg, 0, 50, "Health", nullptr);
 
 		nvgBeginPath(vg);
-		nvgRect(vg, 100, 23, Health * 10, 35);
+		nvgRect(vg, 100, 23, (float)Health * 10, 35);
 		nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 255));
 		nvgFillColor(vg, nvgRGBA(255, 0, 0, 128));
 		nvgFill(vg);
 
 		nvgBeginPath(vg);
-		nvgRect(vg, 100, 23, MaxHealth * 10, 35);
+		nvgRect(vg, 100, 23, (float)MaxHealth * 10, 35);
 		nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 255));
 		nvgStroke(vg);
 	}
