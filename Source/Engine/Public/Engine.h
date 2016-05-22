@@ -7,6 +7,7 @@ class FEngine
 {
 public:
 	FAutoRef<RMesh> BunnyRMesh;
+	FAutoRef<RMesh> EnemyMesh1;
 
 	FEngine()
 	{}
