@@ -49,7 +49,7 @@ void FPlayer::Update() {
 	if (Game.ActiveControls.MoveRight) {
 		SGEntry->Move(Movement, 0, 0);
 	}
-	FBoundingRect PlayerBox = GetBoundingRect();
+	const FBoundingRect& PlayerBox = GetBoundingRect();
 	glm::vec2 adjust = -Game.ScreenSize - PlayerBox.BtmLeft;
 	if (adjust.x < 0) {
 		adjust.x = 0;
@@ -88,12 +88,21 @@ void FEnemy::Update() {
 		Game.GameTimer.GetDeltaTime() * Speed
 		+ SpeedUpOverTime * Game.GameTimer.GetTotalTime();
 	SGEntry->Move(0, 0, Movement);
+	const FBoundingRect& PlayerBox = Game.Player.GetBoundingRect();
+	const FBoundingRect& EnemyBox = GetBoundingRect();
+	if (PlayerBox.BtmLeft.x < EnemyBox.TopRight.x &&
+		PlayerBox.TopRight.x > EnemyBox.BtmLeft.x &&
+		PlayerBox.BtmLeft.y < EnemyBox.TopRight.y &&
+		PlayerBox.TopRight.y > EnemyBox.BtmLeft.y) {
+		Game.KillActiveEntity();
+		return;
+	}
 	if (SGEntry->GetPosition().z >= 0) {
 		Game.KillActiveEntity();
 		Game.Player.Health -= 10;
 		RC.Render->GetHUD()->SetHealth(Game.Player.Health);
+		return;
 	}
 	SGEntry->SetRotation(glm::quat(glm::vec3(Game.GameTimer.GetTotalTime(), 0.0f, 1.0f)));
-
 }
 C3_NAMESPACE_END
