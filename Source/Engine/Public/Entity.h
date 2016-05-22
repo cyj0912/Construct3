@@ -11,7 +11,7 @@ public:
 	virtual void Destroy() = 0;
 
 	const FBoundingRect* BoundingRect;
-	uint32_t LastBoundingUpdate;
+	uint32_t LastBoundingUpdate = 0;
 	virtual const FBoundingRect& GetBoundingRect();
 };
 

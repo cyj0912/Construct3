@@ -7,7 +7,7 @@
 C3_NAMESPACE_BEGIN
 const FBoundingRect& IEntity::GetBoundingRect()
 {
-	if(LastBoundingUpdate < Game.FrameCount)
+	if(Game.FrameCount == 0 || LastBoundingUpdate < Game.FrameCount)
 	{
 		BoundingRect = &SGEntry->GetBoundingRectXY();
 		LastBoundingUpdate = Game.FrameCount;
@@ -43,7 +43,7 @@ void FPlayer::Update() {
 	if (Game.ActiveControls.MoveRight) {
 		SGEntry->Move(Movement, 0, 0);
 	}
-	FBoundingRect PlayerBox = SGEntry->GetBoundingRectXY();
+	FBoundingRect PlayerBox = GetBoundingRect();
 	glm::vec2 adjust = -Game.ScreenSize - PlayerBox.BtmLeft;
 	if (adjust.x < 0) {
 		adjust.x = 0;
@@ -82,5 +82,6 @@ void FEnemy::Update() {
 		Game.GameTimer.GetDeltaTime() * Speed
 		+ SpeedUpOverTime * Game.GameTimer.GetTotalTime();
 	SGEntry->Move(0, 0, Movement);
+	SGEntry->SetRotation(glm::quat(glm::vec3(Game.GameTimer.GetTotalTime(), 0.0f, 1.0f)));
 }
 C3_NAMESPACE_END
