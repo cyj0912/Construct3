@@ -55,5 +55,14 @@ void SGObject::LoadModelFromResource(const FAutoRef<RMesh>& rmesh)
 void SGObject::DeleteModel()
 {
 	delete Model;
+	for(int i = 0; i < this->Parent->Children.size(); i++)
+	{
+		if(this->Parent->Children[i] == this)
+		{
+			this->Parent->Children.erase(this->Parent->Children.begin() + i);
+			break;
+		}
+	}
+	delete this;
 }
 C3_NAMESPACE_END

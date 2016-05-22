@@ -15,18 +15,24 @@ void FPlayer::Destroy() {
 }
 
 void FPlayer::Update() {
-	const float speed = 18;
+	const float speed = 18.0f;
+	glm::vec3 move(0.0f);
 	if (Game.ActiveControls.MoveUp) {
-		SGEntry->Move(0, Game.GameTimer.GetDeltaTime() * speed, 0);
+		move.y += 1.0f;
 	}
 	if (Game.ActiveControls.MoveDown) {
-		SGEntry->Move(0, Game.GameTimer.GetDeltaTime() * -speed, 0);
+		move.y -= 1.0f;
 	}
 	if (Game.ActiveControls.MoveLeft) {
-		SGEntry->Move(Game.GameTimer.GetDeltaTime() * -speed, 0, 0);
+		move.x -= 1.0f;
 	}
 	if (Game.ActiveControls.MoveRight) {
-		SGEntry->Move(Game.GameTimer.GetDeltaTime() * speed, 0, 0);
+		move.x += 1.0f;
+	}
+	if (move.x != 0.0f || move.y != 0.0f)
+	{
+		move = glm::normalize(move) * speed * Game.GameTimer.GetDeltaTime();
+		SGEntry->Move(move);
 	}
 }
 

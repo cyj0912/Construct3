@@ -173,6 +173,8 @@ public:
 		Position.z += z;
 	}
 
+	void Move(const glm::vec3& rel) { Position += rel; }
+
 	const glm::mat4& GetTransform()
 	{
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), Scale);
