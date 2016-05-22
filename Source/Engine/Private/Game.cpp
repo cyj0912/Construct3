@@ -9,15 +9,15 @@ void FGame::NewGame() {
 	InGame = true;
 	ScreenSize = RC.Render->GetMainCamera()->HalfVecGivenZ(0);
 	Entities.push_back(&Player);
-	Entities.push_back(new FEnemy);
 	for (IEntity* Entity : Entities) {
 		Entity->Init();
 	}
-	GameTimer.Init();
+	RC.System->GetSystemClock()->Init();
+	//GameTimer.Init();
 	LARGE_INTEGER l;
 	QueryPerformanceCounter(&l);
 	sfmt_init_gen_rand(&RandGen, l.LowPart ^ l.HighPart);
-	LastEnemySpawnTime = GameTimer.GetTotalTime();
+	LastEnemySpawnTime = GameTimer.GetTotalTime() + 2;	//2 second delay on start of game
 }
 
 void FGame::EndGame() {
@@ -26,6 +26,7 @@ void FGame::EndGame() {
 		Entity->Destroy();
 	}
 	Entities.clear();
+	RC.System->GetSystemClock()->SwitchPause();
 }
 
 void FGame::Update() {
