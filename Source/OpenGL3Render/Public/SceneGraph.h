@@ -139,6 +139,8 @@ public:
 struct FBoundingRect
 {
 	glm::vec2 BtmLeft, TopRight;
+	FBoundingRect() : BtmLeft(glm::vec2()), TopRight(glm::vec2())
+	{}
 };
 
 //Lazy
@@ -172,6 +174,8 @@ public:
 		Position.y += y;
 		Position.z += z;
 	}
+
+	void Move(const glm::vec3& rel) { Position += rel; }
 
 	const glm::mat4& GetTransform()
 	{

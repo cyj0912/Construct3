@@ -22,7 +22,18 @@ const FBoundingRect& SGObject::GetBoundingRectXY()
 	size_t c = Model->GetRMesh()->Vertices.size();
 	if (c % 3 != 0)
 		throw "WTF has happened";
-	for(size_t i = 0; i < c; i += 3)
+	BRect = FBoundingRect();
+	size_t i = 0;
+	{
+		glm::vec3 p(Model->GetRMesh()->Vertices[i], Model->GetRMesh()->Vertices[i + 1], Model->GetRMesh()->Vertices[i + 2]);
+		glm::vec4 hip = GetTransform() * glm::vec4(p, 1.0f);
+		p = glm::vec3(hip) / hip.w;
+		BRect.TopRight.x = p.x;
+		BRect.TopRight.y = p.y;
+		BRect.BtmLeft.x = p.x;
+		BRect.BtmLeft.y = p.y;
+	}
+	for(i = 3; i < c; i += 3)
 	{
 		glm::vec3 p(Model->GetRMesh()->Vertices[i], Model->GetRMesh()->Vertices[i + 1], Model->GetRMesh()->Vertices[i + 2]);
 		glm::vec4 hip = GetTransform() * glm::vec4(p, 1.0f);
@@ -32,6 +43,7 @@ const FBoundingRect& SGObject::GetBoundingRectXY()
 		BRect.BtmLeft.x = min(BRect.BtmLeft.x, p.x);
 		BRect.BtmLeft.y = min(BRect.BtmLeft.y, p.y);
 	}
+	return BRect;
 }
 
 void SGObject::Render()
@@ -55,5 +67,14 @@ void SGObject::LoadModelFromResource(const FAutoRef<RMesh>& rmesh)
 void SGObject::DeleteModel()
 {
 	delete Model;
+	for(int i = 0; i < this->Parent->Children.size(); i++)
+	{
+		if(this->Parent->Children[i] == this)
+		{
+			this->Parent->Children.erase(this->Parent->Children.begin() + i);
+			break;
+		}
+	}
+	delete this;
 }
 C3_NAMESPACE_END

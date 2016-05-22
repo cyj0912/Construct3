@@ -2,6 +2,8 @@
 #include <Game.h>
 #include <OpenGL3Render/Public/Render.h>
 #include <Engine.h>
+#include <sstream>
+#include <string>
 
 C3_NAMESPACE_BEGIN
 //Player
@@ -15,18 +17,24 @@ void FPlayer::Destroy() {
 }
 
 void FPlayer::Update() {
-	const float speed = 18;
+	const float speed = 18.0f;
+	glm::vec3 move(0.0f);
 	if (Game.ActiveControls.MoveUp) {
-		SGEntry->Move(0, Game.GameTimer.GetDeltaTime() * speed, 0);
+		move.y += 1.0f;
 	}
 	if (Game.ActiveControls.MoveDown) {
-		SGEntry->Move(0, Game.GameTimer.GetDeltaTime() * -speed, 0);
+		move.y -= 1.0f;
 	}
 	if (Game.ActiveControls.MoveLeft) {
-		SGEntry->Move(Game.GameTimer.GetDeltaTime() * -speed, 0, 0);
+		move.x -= 1.0f;
 	}
 	if (Game.ActiveControls.MoveRight) {
-		SGEntry->Move(Game.GameTimer.GetDeltaTime() * speed, 0, 0);
+		move.x += 1.0f;
+	}
+	if (move.x != 0.0f || move.y != 0.0f)
+	{
+		move = glm::normalize(move) * speed * Game.GameTimer.GetDeltaTime();
+		SGEntry->Move(move);
 	}
 }
 
@@ -44,5 +52,10 @@ void FEnemy::Destroy() {
 void FEnemy::Update() {
 	const float speed = 1;
 	SGEntry->Move(Game.GameTimer.GetDeltaTime() * -speed, 0, 0);
+	FBoundingRect b = SGEntry->GetBoundingRectXY();
+	std::stringstream ss;
+	ss << b.BtmLeft.x << " " << b.TopRight.x << " ";
+	ss << b.BtmLeft.y << " " << b.TopRight.y;
+	FLog::Debug(ss.str().c_str());
 }
 C3_NAMESPACE_END
