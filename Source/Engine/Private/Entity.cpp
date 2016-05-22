@@ -3,6 +3,7 @@
 #include <OpenGL3Render/Public/Render.h>
 #include <Engine.h>
 #include <SFMT.h>
+#include <OpenGL3Render/Public/HUD.h>
 
 C3_NAMESPACE_BEGIN
 const FBoundingRect& IEntity::GetBoundingRect()
@@ -90,6 +91,7 @@ void FEnemy::Update() {
 	if (SGEntry->GetPosition().z >= 0) {
 		Game.KillActiveEntity();
 		Game.Player.Health -= 10;
+		RC.Render->GetHUD()->SetHealth(Game.Player.Health);
 	}
 	SGEntry->SetRotation(glm::quat(glm::vec3(Game.GameTimer.GetTotalTime(), 0.0f, 1.0f)));
 
