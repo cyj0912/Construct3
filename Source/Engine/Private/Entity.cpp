@@ -43,6 +43,23 @@ void FPlayer::Update() {
 	if (Game.ActiveControls.MoveRight) {
 		SGEntry->Move(Movement, 0, 0);
 	}
+	FBoundingRect PlayerBox = SGEntry->GetBoundingRectXY();
+	glm::vec2 adjust = -Game.ScreenSize - PlayerBox.BtmLeft;
+	if (adjust.x < 0) {
+		adjust.x = 0;
+	}
+	if (adjust.y < 0) {
+		adjust.y = 0;
+	}
+	SGEntry->Move(adjust.x, adjust.y, 0);
+	adjust = Game.ScreenSize - PlayerBox.TopRight;
+	if (adjust.x > 0) {
+		adjust.x = 0;
+	}
+	if (adjust.y > 0) {
+		adjust.y = 0;
+	}
+	SGEntry->Move(adjust.x, adjust.y, 0);
 }
 
 //Enemy

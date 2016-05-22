@@ -7,7 +7,7 @@ FGame Game;
 
 void FGame::NewGame() {
 	ScreenSize = RC.Render->GetMainCamera()->HalfVecGivenZ(0);
-	//Entities.push_back(&Player);
+	Entities.push_back(&Player);
 	Entities.push_back(new FEnemy);
 	for (IEntity* Entity : Entities) {
 		Entity->Init();
