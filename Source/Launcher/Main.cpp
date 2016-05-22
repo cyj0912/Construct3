@@ -8,6 +8,7 @@
 #include <Engine.h>
 #include <functional>
 #include <sstream>
+#include <Game.h>
 
 using namespace c3;
 
@@ -41,8 +42,8 @@ int main(int argc, char *argv[])
 	RC.System->SetRootDirectory("/Volumes/XE/construct3");
 #endif
 	SDL_Init(SDL_INIT_VIDEO);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_Window* window = SDL_CreateWindow("Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 		1280, 720, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
@@ -54,6 +55,8 @@ int main(int argc, char *argv[])
 	render.Resize(1280, 720);
 	RC.Engine = new FEngine;
     RC.Engine->Init();
+	new(&Game) FGame;
+	Game.NewGame();
 	std::string mousePosStr;
 	for (SDL_PollEvent(&e); e.type != SDL_QUIT; SDL_PollEvent(&e))
 	{
@@ -68,8 +71,53 @@ int main(int argc, char *argv[])
 		{
 			if(e.key.keysym.sym == SDLK_SPACE)
 				RC.System->GetSystemClock()->SwitchPause();
+			switch(e.key.keysym.sym)
+			{
+			case SDLK_w:
+				c3::Game.ActiveControls.MoveUp = true;
+				c3::Game.ActiveControls.MoveDown = false;	//Neutralize opposite control
+				break;
+			case SDLK_a:
+				c3::Game.ActiveControls.MoveLeft = true;
+				c3::Game.ActiveControls.MoveRight = false;	//Neutralize opposite control
+				break;
+			case SDLK_s:
+				c3::Game.ActiveControls.MoveDown = true;
+				c3::Game.ActiveControls.MoveUp = false;	//Neutralize opposite control
+				break;
+			case SDLK_d:
+				c3::Game.ActiveControls.MoveRight = true;
+				c3::Game.ActiveControls.MoveLeft = false;	//Neutralize opposite control
+				break;
+				//NewGame key
+			case SDLK_F2:
+				if (c3::Game.InGame) {
+					c3::Game.EndGame();
+				}
+				c3::Game.NewGame();
+				break;
+			}
+		}
+		else if(e.type == SDL_KEYUP)
+		{
+			switch(e.key.keysym.sym)
+			{
+			case SDLK_w:
+				c3::Game.ActiveControls.MoveUp = false;
+				break;
+			case SDLK_a:
+				c3::Game.ActiveControls.MoveLeft = false;
+				break;
+			case SDLK_s:
+				c3::Game.ActiveControls.MoveDown = false;
+				break;
+			case SDLK_d:
+				c3::Game.ActiveControls.MoveRight = false;
+				break;
+			}
 		}
         RC.Engine->Update();
+		Game.Update();
 		std::function<void()> f = std::bind(&FRender::RenderText, &render, mousePosStr);
 		FCallablePtrCommand<std::function<void()>> cmd = FCallablePtrCommand<std::function<void()>>(f);
 		render.Push2DCommand(&cmd);
