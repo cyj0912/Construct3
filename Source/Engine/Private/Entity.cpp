@@ -21,6 +21,7 @@ void FPlayer::Init() {
 	SGEntry = RC.Render->NewSGObject();
 	SGEntry->LoadModelFromResource(RC.Engine->BunnyRMesh);
 	Health = 100;
+	RC.Render->GetHUD()->SetHealth(Game.Player.Health);
 }
 
 void FPlayer::Destroy() {
