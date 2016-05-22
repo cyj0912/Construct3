@@ -18,8 +18,9 @@ public:
 	sfmt_t RandGen;
 	glm::vec2 ScreenSize;
 	float LastEnemySpawnTime;
+	uint32_t FrameCount;
 
-	FGame() : GameTimer(*RC.System->GetSystemClock()) {
+	FGame() : GameTimer(*RC.System->GetSystemClock()), FrameCount(0) {
 
 	}
 

@@ -52,6 +52,7 @@ public:
     {
 		Width = w;
 		Height = h;
+		MProjection = glm::perspective(90.0f / 180.0f * 3.141592654f, (float)w / (float)h, 0.1f, 1000.0f);
     }
 
     void LookAt(const glm::vec3& from, const glm::vec3& to)

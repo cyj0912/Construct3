@@ -9,6 +9,10 @@ public:
 	virtual void Update() = 0;
 	virtual void Init() = 0;
 	virtual void Destroy() = 0;
+
+	const FBoundingRect* BoundingRect;
+	uint32_t LastBoundingUpdate;
+	virtual const FBoundingRect& GetBoundingRect();
 };
 
 class FPlayer : public IEntity {

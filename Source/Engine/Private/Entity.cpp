@@ -5,6 +5,16 @@
 #include <SFMT.h>
 
 C3_NAMESPACE_BEGIN
+const FBoundingRect& IEntity::GetBoundingRect()
+{
+	if(LastBoundingUpdate < Game.FrameCount)
+	{
+		BoundingRect = &SGEntry->GetBoundingRectXY();
+		LastBoundingUpdate = Game.FrameCount;
+	}
+	return *BoundingRect;
+}
+
 //Player
 void FPlayer::Init() {
 	SGEntry = RC.Render->NewSGObject();
