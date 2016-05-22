@@ -3,6 +3,7 @@
 #include <IRender.h>
 #include <vector>
 #include "HUD.h"
+#include "Viewport.h"
 C3_NAMESPACE_BEGIN
 
 class FShader;
@@ -33,6 +34,8 @@ public:
 	{
 		return &Hud;
 	}
+	int GetWidth() override;
+	int GetHeight() override;
 
 private:
 	int Width, Height;
@@ -40,5 +43,8 @@ private:
 	bool Flags[(int)EFlag::NUMBEROFFLAGS];
 	bool bCloseUp;
 	FHUD Hud;
+	FRenderTarget MainRT;
+
+	unsigned int QuadVAO, QuadVert, QuadUV;
 };
 C3_NAMESPACE_END

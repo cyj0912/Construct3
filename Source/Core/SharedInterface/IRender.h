@@ -27,5 +27,7 @@ public:
 	virtual SGObject* NewSGObject() = 0;
 	virtual SGCamera* GetMainCamera() = 0;
 	virtual FHUD* GetHUD() = 0;
+	virtual int GetWidth() = 0;
+	virtual int GetHeight() = 0;
 };
 C3_NAMESPACE_END

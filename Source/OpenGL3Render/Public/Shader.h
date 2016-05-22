@@ -1,9 +1,11 @@
 ﻿#pragma once
 #include <Core.h>
+#include <string>
 
 C3_NAMESPACE_BEGIN
 class FShader
 {
+	friend class FRender;
 public:
     enum class EUniformLocation
     {
@@ -13,7 +15,7 @@ public:
 		Glossy
     };
 	FShader();
-	void Load();
+	void Load(const std::string& name);
 	void Unload();
 	void Bind() const;
 	void Uniform(EUniformLocation loc, void* data) const;

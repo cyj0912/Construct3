@@ -22,7 +22,7 @@ void FHUD::SetMaxHealth(int m)
 {
 	MaxHealth = m;
 }
-SGObject* ttttt;
+
 void FHUD::Render(int w, int h)
 {
 	if(!Temp)

@@ -10,12 +10,12 @@ FShader::FShader(): VertexShader(0), FragmentShader(0), Program(0)
 {
 }
 
-void FShader::Load()
+void FShader::Load(const std::string& name)
 {
-	RFile vertSrc = RFile("brdf.v.glsl");
+	RFile vertSrc = RFile(name + std::string(".v.glsl"));
 	char vertBuffer[4096];
 	vertSrc.BufferRead(vertBuffer, sizeof(vertBuffer));
-	RFile fragSrc = RFile("brdf.f.glsl");
+	RFile fragSrc = RFile(name + std::string(".f.glsl"));
 	char fragBuffer[4096];
 	fragSrc.BufferRead(fragBuffer, sizeof(fragBuffer));
 	const char* bufArr[] = { vertBuffer, fragBuffer };

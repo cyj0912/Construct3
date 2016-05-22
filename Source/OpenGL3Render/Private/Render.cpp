@@ -23,6 +23,7 @@
 C3_NAMESPACE_BEGIN
 
 FShader* Shader3D;
+FShader* ShaderPost;
 FRenderModel* Mesh;
 FRenderModel* MeshErr;
 struct NVGcontext* vg;
@@ -60,7 +61,9 @@ void FRender::PrepareGL()
 	glClearColor(0, 0, 0, 0);
 	glClearDepth(1);
 	Shader3D = new FShader;
-	Shader3D->Load();
+	Shader3D->Load("brdf");
+	ShaderPost = new FShader;
+	ShaderPost->Load("post");
 
 	//Mesh = new FRenderModel(rmesh);
 	//Mesh->Prepare();
@@ -81,10 +84,28 @@ void FRender::PrepareGL()
 	SG.SetRootNode(rootNode);
 	rootNode->Owner = &SG;
 	rootNode->Parent = nullptr;
+
+	MainRT.Init();
+
+	float Vertices[] = { 1.0f, 1.0f,
+		-1.0f, 1.0f,
+		1.0f, -1.0f,
+		1.0f, -1.0f,
+		-1.0f, 1.0f,
+		-1.0f, -1.0f };
+	glGenVertexArrays(1, &QuadVAO);
+	glBindVertexArray(QuadVAO);
+	glGenBuffers(1, &QuadVert);
+	glBindBuffer(GL_ARRAY_BUFFER, QuadVert);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, static_cast<void*>(0));
+	glEnableVertexAttribArray(0);
 }
 
 void FRender::RenderOneFrame()
 {
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearDepth(1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     nvgBeginFrame(vg, Width, Height, 1.0f);
     RenderSprite();
@@ -94,7 +115,9 @@ void FRender::RenderOneFrame()
 	if(Flags[(int)EFlag::ReloadShader])
 	{
 		Shader3D->Unload();
-		Shader3D->Load();
+		Shader3D->Load("brdf");
+		ShaderPost->Unload();
+		ShaderPost->Load("post");
         Flags[(int)EFlag::ReloadShader] = false;
 	}
     if(Flags[(int)EFlag::SwitchNearFar])
@@ -103,52 +126,25 @@ void FRender::RenderOneFrame()
         Flags[(int)EFlag::SwitchNearFar] = false;
     }
     Shader3D->Bind();
-	//glm::mat4 matModel = glm::rotate(glm::mat4(1.0f),
-	//								 RC.System->GetSystemClock()->GetTotalTime(), glm::vec3(0.0f, 1.0f, 0.0f));
-	//matModel = glm::scale(matModel, glm::vec3(2.0f));
- //   //glm::mat4 matView = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -1.0f + RC.System->GetSystemClock()->GetTotalTime()));
-	//glm::mat4 matView = glm::lookAt(glm::vec3(0.0f, 0.0f, bCloseUp ? 20.0f : 200.0f), glm::vec3(), glm::vec3(0.0f, 1.0f, 0.0f));
- //   //float PixelsPerUnit = 100.0f;
- //   //glm::mat4 matProj = glm::ortho(-Width / 2.0f / PixelsPerUnit, Width / 2.0f / PixelsPerUnit,
- //   //                               -Height / 2.0f / PixelsPerUnit, Height / 2.0f / PixelsPerUnit);
-	//glm::mat4 matProj = glm::perspective(90.0f / 180.0f * 3.141592654f, (float)Width / (float)Height, 0.1f, 1000.0f);
- //   glm::mat4 matMV = matView * matModel;
- //   glm::mat4 matMVP = matProj * matMV;
-	//glm::mat3 matNormal = glm::inverseTranspose(glm::mat3(matMV));
-	//Shader3D->Uniform(FShader::EUniformLocation::MV, value_ptr(matMV));
-	//Shader3D->Uniform(FShader::EUniformLocation::MVP, value_ptr(matMVP));
-	//Shader3D->Uniform(FShader::EUniformLocation::Normal, value_ptr(matNormal));
- //   float g = 25.0f;
- //   Shader3D->Uniform(FShader::EUniformLocation::Glossy, &g);
-
-	glEnable(GL_FRAMEBUFFER_SRGB);
+	MainRT.Bind();
+	if (!MainRT.Ready())
+		throw "Renderbuffer error";
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CCW); //Initial
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS); //Initial
- //   Mesh->Draw();
-
- //   float glossiness = 1.0f;
-	//for(float disp = -20.0f; disp <= 20.0f; disp += 10.0f)
-	//{
- //       if(disp == 0.0f)
- //       {
- //           glossiness *= 5.0f;
- //           continue;
- //       }
- //       glm::mat4 newMatModel = glm::translate(glm::mat4(), glm::vec3(disp, 0.0f, 0.0f)) * matModel;
-	//	matMV = matView * newMatModel;
-	//	matMVP = matProj * matView * newMatModel;
-	//	matNormal = glm::inverseTranspose(glm::mat3(matMV));
-	//	Shader3D->Uniform(FShader::EUniformLocation::MV, value_ptr(matMV));
-	//	Shader3D->Uniform(FShader::EUniformLocation::MVP, value_ptr(matMVP));
-	//	Shader3D->Uniform(FShader::EUniformLocation::Normal, value_ptr(matNormal));
- //       Shader3D->Uniform(FShader::EUniformLocation::Glossy, &glossiness);
-	//	Mesh->Draw();
- //       glossiness *= 5.0f;
-	//}
 	MainCam->Resize(Width, Height);
 	SG.Render();
+
+	MainRT.BindDefault();
+	ShaderPost->Bind();
+	MainRT.BindPostprocessTexture();
+	glBindVertexArray(QuadVAO);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_FRAMEBUFFER_SRGB);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glDisable(GL_FRAMEBUFFER_SRGB);
 
     nvgBeginFrame(vg, Width, Height, 1.0f);
@@ -182,6 +178,7 @@ void FRender::Resize(int w, int h)
 	Height = h;
 	if (GetMainCamera())
 		GetMainCamera()->Resize(Width, Height);
+	MainRT.Reinit();
 }
 
 void FRender::DrawControl(float x, float y, float w, float h)
@@ -228,5 +225,15 @@ SGObject* FRender::NewSGObject()
 SGCamera* FRender::GetMainCamera()
 {
 	return MainCam;
+}
+
+int FRender::GetWidth()
+{
+	return Width;
+}
+
+int FRender::GetHeight()
+{
+	return Height;
 }
 C3_NAMESPACE_END
