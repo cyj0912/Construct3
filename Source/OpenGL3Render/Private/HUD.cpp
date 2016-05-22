@@ -27,10 +27,10 @@ void FHUD::Render(int w, int h)
 {
 	if(!Temp)
 	{
-		ttttt = RC.Render->NewSGObject();
-		ttttt->LoadModelFromResource(RC.Engine->EnemyMesh1);
-		ttttt->SetScale(glm::vec3(1.2f));
-		ttttt->SetVisible(false);
+		Temp = RC.Render->NewSGObject();
+		Temp->LoadModelFromResource(RC.Engine->EnemyMesh1);
+		Temp->SetScale(glm::vec3(1.2f));
+		Temp->SetVisible(false);
 	}
 	if(Health <= 0)
 	{
@@ -38,11 +38,11 @@ void FHUD::Render(int w, int h)
 		nvgRect(vg, 0, 0, (float)w, (float)h);
 		nvgFillColor(vg, nvgRGBA(255, 0, 0, 200));
 		nvgFill(vg);
-		ttttt->SetVisible(true);
+		Temp->SetVisible(true);
 	}
 	else
 	{
-		ttttt->SetVisible(false);
+		Temp->SetVisible(false);
 		nvgFillColor(vg, nvgRGB(0, 0, 0));
 		nvgFontSize(vg, 36);
 		nvgFontFace(vg, "normal");

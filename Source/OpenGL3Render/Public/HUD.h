@@ -1,11 +1,11 @@
 #pragma once
 #include <Core.h>
 C3_NAMESPACE_BEGIN
-class FRenderModel;
+class SGObject;
 class FHUD
 {
 	int Health, MaxHealth;
-	FRenderModel* Temp;
+	SGObject* Temp;
 public:
 	FHUD();
 	void SetHealth(int v);
