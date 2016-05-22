@@ -2,6 +2,8 @@
 #include <Game.h>
 #include <OpenGL3Render/Public/Render.h>
 #include <Engine.h>
+#include <sstream>
+#include <string>
 
 C3_NAMESPACE_BEGIN
 //Player
@@ -50,5 +52,10 @@ void FEnemy::Destroy() {
 void FEnemy::Update() {
 	const float speed = 1;
 	SGEntry->Move(Game.GameTimer.GetDeltaTime() * -speed, 0, 0);
+	FBoundingRect b = SGEntry->GetBoundingRectXY();
+	std::stringstream ss;
+	ss << b.BtmLeft.x << " " << b.TopRight.x << " ";
+	ss << b.BtmLeft.y << " " << b.TopRight.y;
+	FLog::Debug(ss.str().c_str());
 }
 C3_NAMESPACE_END

@@ -139,6 +139,8 @@ public:
 struct FBoundingRect
 {
 	glm::vec2 BtmLeft, TopRight;
+	FBoundingRect() : BtmLeft(glm::vec2()), TopRight(glm::vec2())
+	{}
 };
 
 //Lazy
