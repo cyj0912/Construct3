@@ -5,6 +5,7 @@ typedef void* (*GLLOADADDRESS)(const char *name);
 
 class SGObject;
 class SGCamera;
+class FHUD;
 class IRender
 {
 public:
@@ -25,5 +26,6 @@ public:
     virtual void SetFlag(EFlag flag, bool value) = 0;
 	virtual SGObject* NewSGObject() = 0;
 	virtual SGCamera* GetMainCamera() = 0;
+	virtual FHUD* GetHUD() = 0;
 };
 C3_NAMESPACE_END

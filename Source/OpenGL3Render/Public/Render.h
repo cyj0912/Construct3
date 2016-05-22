@@ -2,6 +2,7 @@
 #include <Core.h>
 #include <IRender.h>
 #include <vector>
+#include "HUD.h"
 C3_NAMESPACE_BEGIN
 
 class FShader;
@@ -28,11 +29,16 @@ public:
 	}
 	SGObject* NewSGObject() override;
 	SGCamera* GetMainCamera() override;
+	FHUD* GetHUD() override
+	{
+		return &Hud;
+	}
 
 private:
 	int Width, Height;
 	std::vector<ICommand*> CommandQueue2D;
 	bool Flags[(int)EFlag::NUMBEROFFLAGS];
 	bool bCloseUp;
+	FHUD Hud;
 };
 C3_NAMESPACE_END
