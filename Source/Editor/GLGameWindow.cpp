@@ -41,6 +41,10 @@ void GLGameWindow::resizeGL(int w, int h)
 
 void GLGameWindow::paintGL()
 {
+	if (flagNewGame) {
+		flagNewGame = false;
+		c3::Game.NewGame();
+	}
 	c3::RC.Engine->Update();
 	c3::Game.Update();
     Render.RenderOneFrame();

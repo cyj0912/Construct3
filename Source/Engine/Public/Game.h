@@ -2,46 +2,32 @@
 #include <Core.h>
 #include <Controls.h>
 #include <Entity.h>
+#include <random>
+#include <time.h>
+#include <IRender.h>
+#include <SFMT.h>
 
 C3_NAMESPACE_BEGIN
+extern SGCamera* mainCam;
 class FGame {
 public:
 	FTimer<FPerfTimer> GameTimer;
 	std::vector<IEntity*> Entities;
 	FControls ActiveControls;
 	FPlayer Player;
+	sfmt_t RandGen;
+	glm::vec2 ScreenSize;
+	float LastEnemySpawnTime;
 
 	FGame() : GameTimer(*RC.System->GetSystemClock()) {
 
 	}
 
-	void NewGame() {
-		Entities.push_back(&Player);
-		Entities.push_back(new FEnemy);
-		for (IEntity* Entity : Entities) {
-			Entity->Init();
-		}
-		GameTimer.Init();
-	}
+	void NewGame();
 	
-	void EndGame() {
-		for (IEntity* Entity : Entities) {
-			Entity->Destroy();
-		}
-		Entities.clear();
-	}
+	void EndGame();
 
-	void Update() {
-		RC.System->GetSystemClock()->Tick();
-		GameTimer.Tick();
-		for (IEntity* Entity : Entities) {
-			Entity->Update();
-		}
-	}
-
-	void Test() {
-
-	}
+	void Update();
 };
 
 extern FGame Game;

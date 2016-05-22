@@ -34,4 +34,6 @@ protected:
     {
         QWindow::wheelEvent(event);
     }
+
+	bool flagNewGame = true;
 };
