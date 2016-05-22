@@ -51,7 +51,9 @@ void FHUD::Render(int w, int h)
 		nvgBeginPath(vg);
 		nvgRect(vg, 100, 23, (float)Health * 10, 35);
 		nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 255));
-		nvgFillColor(vg, nvgRGBA(255, 0, 0, 128));
+		NVGpaint redPaint = nvgLinearGradient(vg, 100, 23, 100, 35, nvgRGBA(255, 255, 255, 255), nvgRGBA(255, 0, 0, 100));
+		//nvgFillColor(vg, nvgRGBA(255, 0, 0, 128));
+		nvgFillPaint(vg, redPaint);
 		nvgFill(vg);
 
 		nvgBeginPath(vg);
