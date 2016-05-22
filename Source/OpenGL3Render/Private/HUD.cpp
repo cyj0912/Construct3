@@ -39,6 +39,7 @@ void FHUD::Render(int w, int h)
 		nvgFillColor(vg, nvgRGBA(255, 0, 0, 200));
 		nvgFill(vg);
 		Temp->SetVisible(true);
+		Temp->SetRed(true);
 	}
 	else
 	{

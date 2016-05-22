@@ -37,7 +37,8 @@ public:
 		MV,
         MVP,
 		Normal,
-		Shading
+		Shading,
+		Shading2
     };
 	FShader();
 	void Load(const std::string& name);

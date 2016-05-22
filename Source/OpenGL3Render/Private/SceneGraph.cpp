@@ -15,7 +15,6 @@ void SGCamera::Uniform(const glm::mat4& model)
 	Shader3D->Uniform(FShader::EUniformLocation::MV, value_ptr(matMV));
 	Shader3D->Uniform(FShader::EUniformLocation::MVP, value_ptr(matMVP));
 	Shader3D->Uniform(FShader::EUniformLocation::Normal, value_ptr(matNormal));
-	Shader3D->Uniform(FShader::EUniformLocation::Shading, nullptr);
 }
 
 const FBoundingRect& SGObject::GetBoundingRectXY()
@@ -59,6 +58,10 @@ void SGObject::Render()
 		bModelReady = true;
 	}
 	Owner->GetActiveCamera()->Uniform(GetTransform());
+	if(bRed)
+		Shader3D->Uniform(FShader::EUniformLocation::Shading2, nullptr);
+	else
+		Shader3D->Uniform(FShader::EUniformLocation::Shading, nullptr);
 	Model->Draw();
 }
 

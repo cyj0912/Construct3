@@ -7,6 +7,7 @@
 C3_NAMESPACE_BEGIN
 
 FShadingUniform ShadingState;
+FShadingUniform ShadingState2;
 
 FShader::FShader(): VertexShader(0), FragmentShader(0), Program(0)
 {
@@ -16,8 +17,12 @@ FShader::FShader(): VertexShader(0), FragmentShader(0), Program(0)
 	ShadingState.lights[0].ecPosOrDir = vec3(0.0);
 	ShadingState.material.baseColor = vec3(0.55, 0.99, 0.66);
 	ShadingState.material.specular = vec3(1.0);
-	ShadingState.material.roughness = 0.25f;
-	ShadingState.material.metallic = 0.75f;
+	ShadingState.material.roughness = 0.3f;
+	ShadingState.material.metallic = 0.0f;
+	memcpy(&ShadingState2, &ShadingState, sizeof(FShadingUniform));
+	ShadingState2.material.baseColor = vec3(0.99, 0.0, 0.0);
+	ShadingState2.material.roughness = 0.2f;
+	ShadingState2.material.metallic = 0.8f;
 }
 
 void FShader::Load(const std::string& name)
@@ -103,6 +108,14 @@ void FShader::Uniform(EUniformLocation loc, void *data) const
 		glUniformMatrix3fv(uniformLoc, 1, GL_FALSE, (const GLfloat*)data);
 		break;
 	case EUniformLocation::Shading:
+		glBindBuffer(GL_UNIFORM_BUFFER, UBOShading);
+		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(FShadingUniform), &ShadingState);
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+		break;
+	case EUniformLocation::Shading2:
+		glBindBuffer(GL_UNIFORM_BUFFER, UBOShading);
+		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(FShadingUniform), &ShadingState2);
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 		break;
     }
 }

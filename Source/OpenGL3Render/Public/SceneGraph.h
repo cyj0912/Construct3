@@ -155,8 +155,9 @@ class SGObject : public SGNode
 	glm::vec3 Position;
 	FBoundingRect BRect;
 	bool bVisible;
+	bool bRed;
 public:
-	SGObject() : bVisible(true)
+	SGObject() : bVisible(true), bRed(false)
 	{
 		Reset();
 	}
@@ -232,6 +233,11 @@ public:
 	void SetVisible(bool b)
 	{
 		bVisible = b;
+	}
+
+	void SetRed(bool b)
+	{
+		bRed = b;
 	}
 };
 C3_NAMESPACE_END
